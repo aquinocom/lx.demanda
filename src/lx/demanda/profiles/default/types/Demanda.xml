@@ -4,7 +4,7 @@
    i18n:domain="plone" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
  <property name="title" i18n:translate="">Demanda</property>
  <property name="description" i18n:translate=""></property>
- <property name="icon_expr"></property>
+ <property name="icon_expr">string:${portal_url}/++resource++lx.demanda.imagens/demanda_icon.png</property>
  <property name="content_meta_type">Demanda</property>
  <property name="product">lx.demanda</property>
  <property name="factory">addDemanda</property>
