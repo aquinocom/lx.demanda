@@ -338,6 +338,8 @@ class Demanda(ATCTContent, HistoryAwareMixin):
             totalHST = ((complexidade * 1.3) * multiplicador) * 0.6
         if not(self.deflator) and self.federativo and not(self.reversa):
             totalHST = (complexidade * multiplicador)
+        if not(self.deflator) and self.federativo and self.reversa:
+            totalHST = ((complexidade * 1.3) * multiplicador)
         self.quantHST = totalHST
         self.reindexObject(idxs='quantHST')
 
