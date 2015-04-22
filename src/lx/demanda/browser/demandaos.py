@@ -70,7 +70,7 @@ class DemandaOSView(BrowserView):
                            path=path_demandas,
                            sort_on='Date',
                            sort_order='reverse',)
-        listOS = []
+        listOS = [] 
         for i in demandas:
             if i.ordem_servico:
                 if not(i.ordem_servico in listOS):

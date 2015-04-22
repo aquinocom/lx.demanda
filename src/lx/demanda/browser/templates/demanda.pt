@@ -13,7 +13,7 @@
                 .listing td,
                 .listing th{
                     text-align: center !important;
-                }
+                } 
             </style>
             <h1 tal:content="context/Title"></h1>
             <table class="listing">
