@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    lang="en"
+    metal:use-macro="context/main_template/macros/master"
+    i18n:domain="lx.LES">
+    <head>
+    </head>
+    <body>
+        <tal:block metal:fill-slot="main"
+            tal:define="settings view/settings">
+            <h1>Controle de HST</h1>
+            <form method="post"
+                tal:attributes="action string:${context/absolute_url}/controledemanda"
+                enctype="multipart/form-data"
+                tal:define="errors view/errors">
+                <fieldset>
+                    <legend>Ordem de Serviço</legend>
+                        <div tal:define="error errors/ordem_servico | nothing;"
+                            tal:attributes="class python:'field error' if error else 'field'">
+                            <label for="ordem_servico " i18n:translate="">Ordem de Serviço</label>
+                            <span class="fieldRequired" i18n:translate="">(Obrigatório)</span>
+                            <div class="formHelp" i18n:translate="">
+                                Selecione a ordem de serviço.
+                            </div>
+                            <div tal:condition="error" tal:content="error" />
+                            <select id="ordemServico" name="ordemServico" tal:define="ordens view/getOS">
+                                <tal:block tal:repeat="os ordens">
+                                    <option tal:attributes="value os" tal:content="os">Infraestrutura</option>
+                                </tal:block>
+                            </select>
+                        </div>
+                        <div style="clear: both;"></div>
+                        <input type="submit" name="form.action.ordemServico" value="Pesquisar" />
+                </fieldset>
+            </form>
+            <table class="listing">
+                <tbody>
+                    <tr>
+                        <th>Colaborador</th>
+                        <th>Total de HST</th>
+                    </tr>
+                    <tal:block tal:repeat="colab view/getColaborador">
+                        <tal:block tal:define="totalHST python: view.getTotalHST(colab)">
+                            <tr>
+                                <td>
+                                    <a tal:attributes="href colab/getURL" tal:content="colab/Title"></a>
+                                </td>
+                                <td tal:content="totalHST" style="text-align: center;">
+                                    
+                                </td>
+                            </tr>
+                        </tal:block>
+                    </tal:block>
+                </tbody>
+            </table>
+            <!--<tal:block tal:repeat="colab view/getColaborador">
+                <tal:block tal:define="totalHST python: view.getTotalHST(colab)">
+                    <h1><span tal:replace="colab/Title"/> - (<span tal:replace="totalHST"/> HST)</h1>
+                    <table class="listing" tal:define="itens python:view.getDemandas(colab)">
+                        <tbody>
+                            <tr>
+                                <th>Sistema</th>
+                                <th>Atividade</th>
+                                <th>Deflator</th>
+                                <th>Quantidade HST</th>
+                            </tr>
+                            <tal:block repeat="item itens">
+                                <tr>
+                                    <td>
+                                        <a tal:attributes="href item/getURL" tal:content="item/Title"></a>
+                                    </td>
+                                    <td tal:content="item/atividade" style="text-align: center;"></td>
+                                    <td style="text-align: center;">
+                                        <tal:block tal:condition="item/deflator">
+                                            <span tal:replace="item/valor_deflator"/>
+                                        </tal:block>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <tal:block tal:condition="item/deflator">
+                                            <span tal:content="python: (float(item.complexidade) * item.multiplicador) * float(item.valor_deflator)" />
+                                        </tal:block>
+                                        <tal:block tal:condition="not:item/deflator">
+                                            <span tal:content="python: float(item.complexidade) * item.multiplicador" />
+                                        </tal:block>
+                                    </td>
+                                </tr>
+                            </tal:block>
+                            <tr>
+                                <th colspan="3">Total de HST</th>
+                                <th tal:content="totalHST" style="text-align: center;"></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </tal:block>
+            </tal:block>-->
+        </tal:block>
+    </body>
+</html>

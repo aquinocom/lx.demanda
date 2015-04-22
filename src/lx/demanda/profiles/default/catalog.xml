@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+    <index name="complexidade" meta_type="FieldIndex">
+        <indexed_attr value="complexidade"/>
+    </index>
+    <index name="atividade" meta_type="FieldIndex">
+        <indexed_attr value="atividade"/>
+    </index>
+    <index name="multiplicador" meta_type="FieldIndex">
+        <indexed_attr value="multiplicador"/>
+    </index>
+    <index name="valor_deflator" meta_type="FieldIndex">
+        <indexed_attr value="valor_deflator"/>
+    </index>
+    <index name="deflator" meta_type="FieldIndex">
+        <indexed_attr value="deflator"/>
+    </index>
+    <index name="chamado" meta_type="FieldIndex">
+        <indexed_attr value="chamado"/>
+    </index>
+    <index name="ordem_servico" meta_type="FieldIndex">
+        <indexed_attr value="ordem_servico"/>
+    </index>
+    <index name="quantHST" meta_type="FieldIndex">
+        <indexed_attr value="quantHST"/>
+    </index>
+    <index name="observacao" meta_type="FieldIndex">
+        <indexed_attr value="observacao"/>
+    </index>
+    <index name="reversa" meta_type="FieldIndex">
+        <indexed_attr value="reversa"/>
+    </index>
+    <index name="tipo_servico" meta_type="FieldIndex">
+        <indexed_attr value="tipo_servico"/>
+    </index>
+    <index name="produto" meta_type="FieldIndex">
+        <indexed_attr value="produto"/>
+    </index>
+    <index name="federativo" meta_type="FieldIndex">
+        <indexed_attr value="federativo"/>
+    </index>
+    <index name="status_ra" meta_type="FieldIndex">
+        <indexed_attr value="status_ra"/>
+    </index>
+    <column value="complexidade"/>
+    <column value="atividade"/>    
+    <column value="multiplicador"/>
+    <column value="valor_deflator"/>
+    <column value="deflator"/>
+    <column value="chamado"/>
+    <column value="ordem_servico"/>
+    <column value="quantHST"/>
+    <column value="observacao"/>
+    <column value="reversa"/>
+    <column value="tipo_servico"/>
+    <column value="produto"/>
+    <column value="federativo"/>
+    <column value="status_ra"/>
+</object>

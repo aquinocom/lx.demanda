@@ -1,0 +1,71 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    lang="en"
+    metal:use-macro="here/main_template/macros/master"
+    i18n:domain="lx.demanda">
+    <head>
+    </head>
+    <body>
+        <div metal:fill-slot="main"
+            tal:define="settings view/settings">
+            <form method="post"
+                tal:attributes="action string:${context/absolute_url}/demandaOS"
+                enctype="multipart/form-data"
+                tal:define="errors view/errors">
+                <h1>Atividades por Ordem de Serviço</h1>
+                <fieldset>
+                    <legend>Ordem de Serviço</legend>
+                        <div tal:define="error errors/ordem_servico | nothing;"
+                            tal:attributes="class python:'field error' if error else 'field'">
+                            <label for="ordem_servico " i18n:translate="">Ordem de Serviço</label>
+                            <span class="fieldRequired" i18n:translate="">(Obrigatório)</span>
+                            <div class="formHelp" i18n:translate="">
+                                Selecione a ordem de serviço.
+                            </div>
+                            <div tal:condition="error" tal:content="error" />
+                            <select id="ordemServico" name="ordemServico" tal:define="ordens view/getOrdemServico">
+                                <option value="">---</option>
+                                <tal:block tal:repeat="os ordens">
+                                    <option tal:attributes="value os" tal:content="os">Infraestrutura</option>
+                                </tal:block>
+                            </select>
+                        </div>
+                        <div style="clear: both;"></div>
+                        <input type="submit" name="form.action.ordemServico" value="Pesquisar" />
+                </fieldset>
+                <fieldset tal:define="atividades view/getAtividades" tal:condition="atividades">
+                    <legend>Atividades</legend>
+                    <table class="listing">
+                        <tbody>
+                            <tr>
+                                <th>Atividade</th>
+                                <th>Chamado</th>
+                                <th>Ordem de Servico</th>
+                                <th>Quantidade HST</th>
+                            </tr>
+                            <tal:block repeat="atividade atividades">
+                                <tr>
+                                    <td>
+                                        <a tal:attributes="href atividade/getURL" tal:content="atividade/atividade"></a>
+                                    </td>
+                                    <td tal:content="atividade/chamado" style="text-align: center;"></td>
+                                    <td tal:content="atividade/ordem_servico" style="text-align: center;"></td>
+                                    <td style="text-align: center;">
+                                        <span tal:replace="atividade/quantHST"/>
+                                    </td>
+                                </tr>
+                            </tal:block>
+                            <tr>
+                                <th colspan="3">Total de HST</th>
+                                <!--<th>Total de HST</th>-->
+                                <th tal:content="view/getTotalHST" style="text-align: center;"></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>

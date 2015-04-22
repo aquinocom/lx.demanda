@@ -1,0 +1,60 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="lx.demanda">
+
+    <include package="plone.app.contentmenu" />
+
+    <browser:resourceDirectory
+        name="lx.demanda.imagens"
+        directory="imagens"
+        permission="zope.Public"
+    />
+    
+    <!-- -*- extra stuff goes here -*- -->
+
+    <browser:page
+        name="demanda"
+        for="lx.demanda.interfaces.contents.IDemanda"
+        class=".demanda.DemandaView"
+        template="templates/demanda.pt"
+        permission="zope2.View"
+    />
+
+    <browser:page
+        name="listademanda"
+        for="*"
+        class=".listademanda.ListaDemandaView"
+        template="templates/listademanda.pt"
+        permission="zope2.View"
+    />
+  
+    <browser:page
+        name="controledemanda"
+        for="*"
+        class=".controledemanda.ControleDemandaView"
+        template="templates/controledemanda.pt"
+        permission="zope2.View"
+    />
+
+    <browser:page
+        name="demandaOS"
+        for="*"
+        class=".demandaos.DemandaOSView"
+        template="templates/demandaos.pt"
+        permission="zope2.View"
+    />
+
+    <browser:page
+        name="catalogoservico-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class="..interfaces.catalogoservico.CatalogoServicoSettingsPanel"
+        permission="cmf.ManagePortal"
+    />
+
+  
+</configure>
