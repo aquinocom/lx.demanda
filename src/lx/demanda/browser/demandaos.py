@@ -56,7 +56,7 @@ class DemandaOSView(BrowserView):
             path_demandas = '/'.join(self.context.getPhysicalPath())
             atividades = catalog(object_provides=IDemanda.__identifier__,
                                path=path_demandas,
-                               sort_on='Date',
+                               sort_on='chamado',
                                sort_order='reverse',
                                ordem_servico=ordemServico,
                                )

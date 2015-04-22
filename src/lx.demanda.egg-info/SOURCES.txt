@@ -14,9 +14,11 @@ src/lx.demanda.egg-info/requires.txt
 src/lx.demanda.egg-info/top_level.txt
 src/lx/demanda/__init__.py
 src/lx/demanda/config.py
+src/lx/demanda/listademanda.py
 src/lx/demanda/testing.py
 src/lx/demanda/browser/__init__.py
 src/lx/demanda/browser/controledemanda.py
+src/lx/demanda/browser/demanda.py
 src/lx/demanda/browser/demandaos.py
 src/lx/demanda/browser/listademanda.py
 src/lx/demanda/content/__init__.py

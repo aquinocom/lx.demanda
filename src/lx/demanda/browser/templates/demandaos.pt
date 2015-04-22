@@ -10,6 +10,12 @@
     <body>
         <div metal:fill-slot="main"
             tal:define="settings view/settings">
+            <style>
+                .listing td,
+                .listing th{
+                    text-align: center !important;
+                }
+            </style>
             <form method="post"
                 tal:attributes="action string:${context/absolute_url}/demandaOS"
                 enctype="multipart/form-data"
@@ -41,8 +47,9 @@
                         <tbody>
                             <tr>
                                 <th>Atividade</th>
-                                <th>Chamado</th>
                                 <th>Ordem de Servico</th>
+                                <th>Chamado</th>
+                                <th>Status</th>
                                 <th>Quantidade HST</th>
                             </tr>
                             <tal:block repeat="atividade atividades">
@@ -50,17 +57,17 @@
                                     <td>
                                         <a tal:attributes="href atividade/getURL" tal:content="atividade/atividade"></a>
                                     </td>
-                                    <td tal:content="atividade/chamado" style="text-align: center;"></td>
-                                    <td tal:content="atividade/ordem_servico" style="text-align: center;"></td>
-                                    <td style="text-align: center;">
+                                    <td tal:content="atividade/ordem_servico"></td>
+                                    <td tal:content="atividade/chamado"></td>
+                                    <td tal:content="atividade/status_ra"></td>
+                                    <td>
                                         <span tal:replace="atividade/quantHST"/>
                                     </td>
                                 </tr>
                             </tal:block>
                             <tr>
-                                <th colspan="3">Total de HST</th>
-                                <!--<th>Total de HST</th>-->
-                                <th tal:content="view/getTotalHST" style="text-align: center;"></th>
+                                <th colspan="4">Total de HST</th>
+                                <th tal:content="view/getTotalHST"></th>
                             </tr>
                         </tbody>
                     </table>
