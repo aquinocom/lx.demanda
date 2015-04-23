@@ -36,16 +36,21 @@
                 </fieldset>
             </form>
             <tal:block tal:define="itens view/getDemandas">
-                <table class="listing" tal:condition="itens">
-                    <tbody>
+                <table class="listing"
+                       summary="Content listing"
+                       i18n:attributes="summary summary_content_listing;">
+                    <thead>
                         <tr>
                             <th width="35%">Sistema</th>
                             <th width="9%">Ordem de Serviço</th>
-                            <th width="20%">Chamado</th>
+                            <th>Chamado</th>
+                            <th width="12%">Status RA</th>
                             <th>Atividade</th>
                             <th>Deflator</th>
                             <th>Quantidade HST</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         <tal:block repeat="item itens">
                             <tr>
                                 <td>
@@ -53,15 +58,11 @@
                                 </td>
                                 <td tal:content="item/ordem_servico" style="text-align: center;"></td>
                                 <td style="text-align: center;">
-                                    <!--<span tal:replace="item/chamado"/>-->
-                                    <tal:block tal:condition="not:item/status_ra">
-                                        <span tal:replace="item/chamado"/>
-                                    </tal:block>
-                                    <tal:block tal:condition="item/status_ra">
-                                        <span tal:replace="item/chamado"/> - <strong tal:content="item/status_ra"></strong>
-                                    </tal:block>
+                                    <span tal:replace="item/chamado"/>
                                 </td>
-                                
+                                <td>
+                                    <strong tal:content="item/status_ra"></strong>
+                                </td>
                                 <td tal:content="item/atividade" style="text-align: center;"></td>
                                 <td style="text-align: center;">
                                     <tal:block tal:condition="item/deflator">
@@ -73,11 +74,14 @@
                                 </td>
                             </tr>
                         </tal:block>
-                        <tr>
-                            <th colspan="5">Total de HST</th>
-                            <th tal:content="view/getTotalHST" style="text-align: center;"></th>
-                        </tr>
+                        
                     </tbody>
+                </table>
+                <table class="listing" tal:condition="itens" width="100%;" style="margin-top:-15px;">
+                    <tr>
+                        <th width="85%" style="border: none!important;">Total de HST</th>
+                        <th tal:content="view/getTotalHST" style="text-align: center; border: none!important;"></th>
+                    </tr>
                 </table>
             </tal:block>
         </tal:block>
