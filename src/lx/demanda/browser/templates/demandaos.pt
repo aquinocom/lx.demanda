@@ -43,8 +43,10 @@
                 </fieldset>
                 <fieldset tal:define="atividades view/getAtividades" tal:condition="atividades">
                     <legend>Atividades</legend>
-                    <table class="listing">
-                        <tbody>
+                    <table class="listing"
+                       summary="Content listing"
+                       i18n:attributes="summary summary_content_listing;">
+                        <thead>
                             <tr>
                                 <th>Atividade</th>
                                 <th>Ordem de Servico</th>
@@ -52,6 +54,8 @@
                                 <th>Status</th>
                                 <th>Quantidade HST</th>
                             </tr>
+                        </thead>
+                        <tbody>
                             <tal:block repeat="atividade atividades">
                                 <tr>
                                     <td>
@@ -65,11 +69,13 @@
                                     </td>
                                 </tr>
                             </tal:block>
-                            <tr>
-                                <th colspan="4">Total de HST</th>
-                                <th tal:content="view/getTotalHST"></th>
-                            </tr>
                         </tbody>
+                    </table>
+                    <table class="listing" tal:condition="atividades" width="596px;" style="margin-top:-15px;">
+                        <tr>
+                            <th width="85%" style="border: none!important;">Total de HST</th>
+                            <th tal:content="view/getTotalHST" style="text-align: center; border: none!important;"></th>
+                        </tr>
                     </table>
                 </fieldset>
             </form>

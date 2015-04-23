@@ -35,12 +35,16 @@
                         <input type="submit" name="form.action.ordemServico" value="Pesquisar" />
                 </fieldset>
             </form>
-            <table class="listing">
-                <tbody>
+            <table class="listing"
+                summary="Content listing"
+                i18n:attributes="summary summary_content_listing;">
+                <thead>
                     <tr>
                         <th>Colaborador</th>
                         <th>Total de HST</th>
                     </tr>
+                </thead>
+                <tbody>
                     <tal:block tal:repeat="colab view/getColaborador">
                         <tal:block tal:define="totalHST python: view.getTotalHST(colab)">
                             <tr>
