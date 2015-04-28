@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <object name="portal_skins" allow_any="False" cookie_persistence="False"
    default_skin="Sunburst Theme">
+    <object name="lx_demanda_css"
+        meta_type="Filesystem Directory View"
+        directory="lx.demanda:skins/css" />
+    <object name="lx_demanda_js"
+        meta_type="Filesystem Directory View"
+        directory="lx.demanda:skins/js" />
     <object name="lx_demanda_templates"
         meta_type="Filesystem Directory View"
         directory="lx.demanda:skins/templates" />
@@ -8,7 +14,13 @@
         name="Sunburst Theme"
         based-on="Sunburst Theme">
         <layer
-            name="lx_demanda_templates"
+            name="lx_demanda_css"
             insert-after="custom"/>
+        <layer
+            name="lx_demanda_js"
+            insert-after="lx_demanda_css"/>
+        <layer
+            name="lx_demanda_templates"
+            insert-after="lx_demanda_js"/>
     </skin-path>
 </object>

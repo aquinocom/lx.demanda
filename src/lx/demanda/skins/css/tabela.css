@@ -1,0 +1,22 @@
+#atividades{
+    float: left;
+}
+
+#atividades tr:hover {
+    background: #DDDDDD;
+}
+.dynatable-pagination-links span, .dynatable-pagination-links li {
+    display: inline-block !important;
+}
+.totalHST{
+    font-size: 1.5em;
+    margin-top: 10px;
+}
+.totalHST span{
+    font-weight: bold;
+    color: #3657F9;
+}
+fieldset, .editionComment {
+    margin: 0 !important;
+    padding: 0 !important;
+}

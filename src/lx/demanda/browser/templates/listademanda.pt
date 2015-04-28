@@ -6,6 +6,36 @@
     metal:use-macro="context/main_template/macros/master"
     i18n:domain="lx.LES">
     <head>
+        <metal:headslot metal:fill-slot="head_slot">
+            <link rel="stylesheet" tal:attributes="href string:${context/portal_url}/jquery.dynatable.css">
+            <link rel="stylesheet" tal:attributes="href string:${context/portal_url}/tabela.css">
+            <script tal:attributes="src string:${context/portal_url}/jquery.dynatable.js"></script>
+            <script type="text/javascript">
+                $(document).ready( function() {
+                    $('#atividades').dynatable({
+                        inputs: {
+                            paginationPrev: 'Anterior',
+                            paginationNext: 'Próximo',
+                            paginationText: 'Páginas: ',
+                            perPageText: 'Exibir: ',
+                            searchText: 'Localizar ',
+                            recordCountText: 'Mostrando ',
+                            recordCountToText: ' a ',
+                            recordCountOfText: ' de ',
+                            textFilterFromText: ' (filtrada a partir de ',
+                            textFilterTotalText: ' registros)',
+                        },
+                        params: {
+                            records: 'registros',
+                        },
+                        dataset: {
+                          perPageDefault: 15,
+                          perPageOptions: [10,20,50,100],
+                        },
+                    });
+                });
+            </script>
+        </metal:headslot>
     </head>
     <body>
         <tal:block metal:fill-slot="main"
@@ -36,53 +66,59 @@
                 </fieldset>
             </form>
             <tal:block tal:define="itens view/getDemandas">
-                <table class="listing"
-                       summary="Content listing"
-                       i18n:attributes="summary summary_content_listing;">
-                    <thead>
-                        <tr>
-                            <th width="35%">Sistema</th>
-                            <th width="9%">Ordem de Serviço</th>
-                            <th>Chamado</th>
-                            <th width="12%">Status RA</th>
-                            <th>Atividade</th>
-                            <th>Deflator</th>
-                            <th>Quantidade HST</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tal:block repeat="item itens">
+                <fieldset>
+                    <legend>Totalização</legend>
+                    <p class="totalHST">Total de HTS: <span tal:content="view/getTotalHST"/></p>
+                </fieldset>
+                <fieldset>
+                    <legend>Atividades</legend>
+                    <table class="listing"
+                           summary="Content listing"
+                           i18n:attributes="summary summary_content_listing;" id="atividades">
+                        <thead>
                             <tr>
-                                <td>
-                                    <a tal:attributes="href item/getURL" tal:content="item/Title"></a>
-                                </td>
-                                <td tal:content="item/ordem_servico" style="text-align: center;"></td>
-                                <td style="text-align: center;">
-                                    <span tal:replace="item/chamado"/>
-                                </td>
-                                <td>
-                                    <strong tal:content="item/status_ra"></strong>
-                                </td>
-                                <td tal:content="item/atividade" style="text-align: center;"></td>
-                                <td style="text-align: center;">
-                                    <tal:block tal:condition="item/deflator">
-                                        <span tal:replace="item/valor_deflator"/>
-                                    </tal:block>
-                                </td>
-                                <td style="text-align: center;">
-                                    <span tal:replace="item/quantHST"/>
-                                </td>
+                                <th width="35%">Sistema</th>
+                                <th width="9%">Ordem de Serviço</th>
+                                <th>Chamado</th>
+                                <th width="12%">Status RA</th>
+                                <th>Atividade</th>
+                                <th>Deflator</th>
+                                <th>Quantidade HST</th>
                             </tr>
-                        </tal:block>
-                        
-                    </tbody>
-                </table>
-                <table class="listing" tal:condition="itens" width="100%;" style="margin-top:-15px;">
-                    <tr>
-                        <th width="85%" style="border: none!important;">Total de HST</th>
-                        <th tal:content="view/getTotalHST" style="text-align: center; border: none!important;"></th>
-                    </tr>
-                </table>
+                        </thead>
+                        <tbody>
+                            <tal:block repeat="item itens">
+                                <tr>
+                                    <td>
+                                        <a tal:attributes="href item/getURL" tal:content="item/Title"></a>
+                                    </td>
+                                    <td tal:content="item/ordem_servico" style="text-align: center;"></td>
+                                    <td style="text-align: center;">
+                                        <span tal:replace="item/chamado"/>
+                                    </td>
+                                    <td>
+                                        <strong tal:content="item/status_ra"></strong>
+                                    </td>
+                                    <td tal:content="item/atividade" style="text-align: center;"></td>
+                                    <td style="text-align: center;">
+                                        <tal:block tal:condition="item/deflator">
+                                            <span tal:replace="item/valor_deflator"/>
+                                        </tal:block>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span tal:replace="item/quantHST"/>
+                                    </td>
+                                </tr>
+                            </tal:block>
+                        </tbody>
+                    </table>
+                    <!--<table class="listing" tal:condition="itens" width="100%;" style="margin-top:-15px;">
+                        <tr>
+                            <th width="85%" style="border: none!important;">Total de HST</th>
+                            <th tal:content="view/getTotalHST" style="text-align: center; border: none!important;"></th>
+                        </tr>
+                    </table>-->
+                </fieldset>
             </tal:block>
         </tal:block>
     </body>

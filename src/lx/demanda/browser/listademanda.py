@@ -60,16 +60,14 @@ class ListaDemandaView(BrowserView):
         catalog = getToolByName(self, 'portal_catalog')
         path_demandas = '/'.join(self.context.getPhysicalPath())
         ordemServico = self.request.get('ordemServico', None)
+        if (ordemServico == None):
+            os = self.getOS()
+            if os:
+                ordemServico = os[0]
         if (ordemServico != None) and (ordemServico != ' '):
             demandas = catalog(object_provides=IDemanda.__identifier__,
                                path=path_demandas,
                                ordem_servico=ordemServico,
-                               sort_on='chamado',
-                               sort_order='reverse',)
-            return demandas
-        else:
-            demandas = catalog(object_provides=IDemanda.__identifier__,
-                               path=path_demandas,
                                sort_on='chamado',
                                sort_order='reverse',)
             return demandas
@@ -90,7 +88,7 @@ class ListaDemandaView(BrowserView):
     def getOS(self):
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ICatalogoServicoPrefsForm)
-        ordens_servicos = tuple(' ')
+        ordens_servicos = tuple()
         try:
             ordens_servicos = ordens_servicos + settings.ordem_servico
         except:
