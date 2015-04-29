@@ -29,7 +29,7 @@
                             records: 'registros',
                         },
                         dataset: {
-                          perPageDefault: 15,
+                          perPageDefault: 50,
                           perPageOptions: [10,20,50,100],
                         },
                     });
