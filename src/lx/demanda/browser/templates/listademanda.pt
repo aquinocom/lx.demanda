@@ -56,8 +56,16 @@
                             </div>
                             <div tal:condition="error" tal:content="error" />
                             <select id="ordemServico" name="ordemServico" tal:define="ordens view/getOS">
-                                <tal:block tal:repeat="os ordens">
-                                    <option tal:attributes="value os" tal:content="os">Infraestrutura</option>
+                                <tal:block tal:repeat="os ordens"
+                                    tal:define="or_request python: context.REQUEST.get('ordemServico', None)">
+                                        <tal:block tal:condition="not:or_request">
+                                            <option tal:attributes="value os" tal:content="os">Infraestrutura</option>
+                                        </tal:block>
+                                        <tal:block tal:condition="or_request">
+                                            <option tal:attributes="value os;
+                                                                    selected python: os == or_request;"
+                                                    tal:content="os">Infraestrutura</option>
+                                        </tal:block>
                                 </tal:block>
                             </select>
                         </div>
