@@ -50,6 +50,14 @@
     />
 
     <browser:page
+        name="subProcessos"
+        for="*"
+        class=".subprocessos.SubProcessosView"
+        template="templates/subprocessos.pt"
+        permission="zope2.View"
+    />
+    
+    <browser:page
         name="catalogoservico-controlpanel"
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         class="..interfaces.catalogoservico.CatalogoServicoSettingsPanel"
