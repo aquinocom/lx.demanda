@@ -13,6 +13,7 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from xml.etree.ElementTree import iterparse
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
+from Acquisition import aq_base, aq_inner, aq_parent
 #Libs python
 from lx.demanda.interfaces.contents import IDemanda
 
@@ -89,3 +90,8 @@ class DemandaOSView(BrowserView):
         total = sum(quantidades)
         return total
 
+    @memoize
+    def getColaborador(self, item):
+        obj = item.getObject()
+        colab = aq_parent(aq_inner(obj)).Title()
+        return colab

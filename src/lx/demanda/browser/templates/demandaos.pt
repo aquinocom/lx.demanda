@@ -56,6 +56,7 @@
                        i18n:attributes="summary summary_content_listing;">
                         <thead>
                             <tr>
+                                <th>Colaborador</th>
                                 <th>Atividade</th>
                                 <th>Ordem de Servico</th>
                                 <th>Chamado</th>
@@ -66,6 +67,9 @@
                         <tbody>
                             <tal:block repeat="atividade atividades">
                                 <tr>
+                                    <td>
+                                        <span tal:content="python: view.getColaborador(atividade)"></span>
+                                    </td>
                                     <td>
                                         <a tal:attributes="href atividade/getURL" tal:content="atividade/atividade"></a>
                                     </td>
