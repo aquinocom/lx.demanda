@@ -346,11 +346,10 @@ class Demanda(ATCTContent, HistoryAwareMixin):
     def getOS(self):
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ICatalogoServicoPrefsForm)
-        ordens_servicos = tuple(' ')
         try:
-            ordens_servicos = ordens_servicos + settings.ordem_servico
+            ordens_servicos = settings.ordem_servico
         except:
-            ordens_servicos = ordens_servicos
+            ordens_servicos = tuple(' ')
         return ordens_servicos
 
 
