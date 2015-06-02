@@ -32,7 +32,6 @@
                             </div>
                             <div tal:condition="error" tal:content="error" />
                             <select id="ordemServico" name="ordemServico" tal:define="ordens view/getOrdemServico">
-                                <option value=""></option>
                                 <tal:block tal:repeat="os ordens"
                                     tal:define="or_request python: context.REQUEST.get('ordemServico', None)">
                                         <tal:block tal:condition="not:or_request">

@@ -1,21 +1,14 @@
 # -*- coding: utf-8 -*-
 from Products.Five.browser import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_inner
 from plone.memoize.instance import memoize
-from lxml import etree
-import re
-import logging
-from zope.site.hooks import getSite
-from zope.component import queryUtility
-from plone.i18n.normalizer.interfaces import IIDNormalizer
-from xml.etree.ElementTree import iterparse
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
-from Acquisition import aq_base, aq_inner, aq_parent
+from Acquisition import aq_parent
 #Libs python
 from lx.demanda.interfaces.contents import IDemanda
+from lx.demanda.interfaces.interfaces import ICatalogoServicoPrefsForm
 
 
 class SubProcessosView(BrowserView):
@@ -40,7 +33,7 @@ class SubProcessosView(BrowserView):
         """
         context = aq_inner(self.context)
         utils = getToolByName(context, 'plone_utils')
-        if (ordemServico == ''):
+        if (ordemServico == ' '):
             self.errors['ordem_servico'] = "O campo é obrigatório."
         if (subProcesso == ''):
             self.errors['sub_processos'] = "O campo é obrigatório."
@@ -73,18 +66,14 @@ class SubProcessosView(BrowserView):
 
     @memoize
     def getOrdemServico(self):
-        catalog = getToolByName(self, 'portal_catalog')
-        path_demandas = '/'.join(self.context.getPhysicalPath())
-        demandas = catalog(object_provides=IDemanda.__identifier__,
-                           path=path_demandas,
-                           sort_on='Date',
-                           sort_order='reverse',)
-        listOS = [] 
-        for i in demandas:
-            if i.ordem_servico:
-                if not(i.ordem_servico in listOS):
-                    listOS.append(i.ordem_servico)
-        return listOS
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ICatalogoServicoPrefsForm)
+        ordens_servicos = tuple(' ')
+        try:
+            ordens_servicos = ordens_servicos + settings.ordem_servico
+        except:
+            ordens_servicos = ordens_servicos
+        return ordens_servicos
 
     @memoize
     def getTotalHST(self):

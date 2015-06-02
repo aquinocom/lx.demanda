@@ -32,7 +32,6 @@
                             </div>
                             <div tal:condition="error" tal:content="error" />
                             <select id="ordemServico" name="ordemServico" tal:define="ordens view/getOrdemServico">
-                                <option value=""></option>
                                 <tal:block tal:repeat="os ordens"
                                     tal:define="or_request python: context.REQUEST.get('ordemServico', None)">
                                         <tal:block tal:condition="not:or_request">
@@ -83,7 +82,7 @@
                             </tal:block>
                         </tbody>
                     </table>
-                    <table class="listing" tal:condition="atividades" width="596px;" style="margin-top:-15px;">
+                    <table class="listing" tal:condition="atividades" width="702px;" style="margin-top:-15px;">
                         <tr>
                             <th width="85%" style="border: none!important;">Total de HST</th>
                             <th tal:content="view/getTotalHST" style="text-align: center; border: none!important;"></th>

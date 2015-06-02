@@ -90,6 +90,7 @@
                                 <th>Chamado</th>
                                 <th width="12%">Status RA</th>
                                 <th>Atividade</th>
+                                <th>Federativo</th>
                                 <th>Deflator</th>
                                 <th>Quantidade HST</th>
                             </tr>
@@ -108,6 +109,14 @@
                                         <strong tal:content="item/status_ra"></strong>
                                     </td>
                                     <td tal:content="item/atividade" style="text-align: center;"></td>
+                                    <td style="text-align: center;">
+                                        <tal:block tal:condition="item/federativo">
+                                            <b style="color: blue;">Sim</b>
+                                        </tal:block>
+                                        <tal:block tal:condition="not:item/federativo">
+                                            <b style="color: red;">Não</b>
+                                        </tal:block>
+                                    </td>
                                     <td style="text-align: center;">
                                         <tal:block tal:condition="item/deflator">
                                             <span tal:replace="item/valor_deflator"/>
