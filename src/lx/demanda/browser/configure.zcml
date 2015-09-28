@@ -32,6 +32,14 @@
         template="templates/listademanda.pt"
         permission="zope2.View"
     />
+
+    <browser:page
+        name="listademandaos"
+        for="*"
+        class=".listademandaos.ListaDemandaOSView"
+        template="templates/listademandaos.pt"
+        permission="zope2.View"
+    />
   
     <browser:page
         name="controledemanda"
