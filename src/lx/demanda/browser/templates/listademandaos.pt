@@ -194,6 +194,12 @@
                             </tal:block>
                         </tbody>
                     </table>
+                    <a tal:attributes="href string:${context/absolute_url}/exportExcel?${view/requestOS}"
+                       style="border:none;"
+                       title="Exportar para Excel"
+                       alt="Exportar para Excel">
+                        <img tal:attributes="src string:${context/absolute_url}/++resource++lx.demanda.imagens/export_excel.png" />
+                    </a>
                     <!--<table class="listing" tal:condition="itens" width="100%;" style="margin-top:-15px;">
                         <tr>
                             <th width="85%" style="border: none!important;">Total de HST</th>

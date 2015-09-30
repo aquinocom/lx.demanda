@@ -64,7 +64,14 @@
         template="templates/subprocessos.pt"
         permission="zope2.View"
     />
-    
+
+    <browser:page
+        name="exportExcel"
+        for="*"
+        class=".exportExcel.ExportExcelView"
+        permission="zope2.View"
+    />
+
     <browser:page
         name="catalogoservico-controlpanel"
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"

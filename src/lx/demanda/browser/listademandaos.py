@@ -94,3 +94,20 @@ class ListaDemandaOSView(BrowserView):
         except:
             ordens_servicos = ordens_servicos
         return ordens_servicos
+
+    @memoize
+    def requestOS(self):
+        ordemServico = self.request.get('ordemServico', None)
+        if (ordemServico == None):
+            os = self.getOS()
+            if os:
+                ordemServico = os[0]
+        type_var = type(ordemServico)
+        texto = ''
+        parametro = 'ordemServico:list='
+        if type_var == list:
+            for i in ordemServico:
+                texto += parametro + i + '&'
+        else:
+            texto += parametro + ordemServico
+        return texto
