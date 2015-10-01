@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from Products.PythonScripts.standard import html_quote
 from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 from openpyxl import Workbook
 from openpyxl.styles import fills, PatternFill
 from openpyxl.styles import Font
-from openpyxl.styles.borders import Border, Side
 from StringIO import StringIO
 from lx.demanda.interfaces.contents import IDemanda
+
 
 class ExportExcelView(BrowserView):
 
@@ -45,10 +44,6 @@ class ExportExcelView(BrowserView):
         f1 = ws['F1']
 
         ft = Font(bold=True, color="FFFFFF")
-        thin_border = Border(left=Side(style='thin'),
-                             right=Side(style='thin'),
-                             top=Side(style='thin'),
-                             bottom=Side(style='thin'))
 
         fill = PatternFill(patternType=fills.FILL_SOLID)
 
