@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    lang="en"
+    metal:use-macro="context/main_template/macros/master"
+    i18n:domain="lx.demanda">
+    <head>
+    </head>
+    <body>
+        <tal:block metal:fill-slot="main">
+            <style>
+                .listing td,
+                .listing th{
+                    text-align: center !important;
+                } 
+            </style>
+            <h1 tal:content="context/Title"></h1>
+            <table class="listing">
+                <tbody>
+                    <tr>
+                        <th>Projeto</th>
+                        <th>Data início</th>
+                        <th>Data fim</th>
+                        <th>Duração</th>
+                        <th>Quantidade HST</th>
+                    </tr>
+                    <tr>
+                        <td tal:content="context/projeto">
+                        </td>
+                        <td tal:define="data_inicio context/data_inicio">
+                            <span tal:content="python:data_inicio.strftime('%d/%m/%Y %H:%M')"></span>
+                        </td>
+                        <td tal:define="data_fim context/data_fim">
+                            <span tal:content="python:data_fim.strftime('%d/%m/%Y %H:%M')"></span>
+                        </td>
+                        <td tal:content="context/duracao">
+                        </td>
+                        <td tal:content="context/quantHST">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="5">Observação</th>
+                    </tr>
+                    <tr>
+                        <td colspan="5"
+                            style="text-align: left !important;">
+                            <span  tal:replace="structure context/observacao"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </tal:block>
+    </body>
+</html>

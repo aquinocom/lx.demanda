@@ -42,6 +42,18 @@
     <index name="status_ra" meta_type="FieldIndex">
         <indexed_attr value="status_ra"/>
     </index>
+    <index name="projeto" meta_type="FieldIndex">
+        <indexed_attr value="projeto"/>
+    </index>
+    <index name="data_inicio" meta_type="DateIndex">
+        <property name="index_naive_time_as_local">True</property>
+    </index>
+    <index name="data_fim" meta_type="DateIndex">
+        <property name="index_naive_time_as_local">True</property>
+    </index>
+    <index name="duracao" meta_type="FieldIndex">
+        <indexed_attr value="duracao"/>
+    </index>
     <column value="complexidade"/>
     <column value="atividade"/>    
     <column value="multiplicador"/>
@@ -56,4 +68,8 @@
     <column value="produto"/>
     <column value="federativo"/>
     <column value="status_ra"/>
+    <column value="projeto"/>
+    <column value="data_inicio"/>
+    <column value="data_fim"/>
+    <column value="duracao"/>
 </object>

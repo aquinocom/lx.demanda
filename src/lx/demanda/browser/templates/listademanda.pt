@@ -7,12 +7,19 @@
     i18n:domain="lx.LES">
     <head>
         <metal:headslot metal:fill-slot="head_slot">
-            <link rel="stylesheet" tal:attributes="href string:${context/portal_url}/jquery.dynatable.css">
-            <link rel="stylesheet" tal:attributes="href string:${context/portal_url}/tabela.css">
+			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker-bootstrap-filtro.css"/>
+			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker.css"/>
+            <link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/jquery.dynatable.css">
+            <link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/tabela.css">
+
+			<!--<script type="text/javascript" tal:attributes="src string:${context/portal_url}/jquery-1.11.2.min.js"></script>-->
+			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.js"></script>
+			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.pt-BR.js"></script>
+
             <script tal:attributes="src string:${context/portal_url}/jquery.dynatable.js"></script>
             <script type="text/javascript">
                 $(document).ready( function() {
-                    $('#atividades').dynatable({
+                    $('#atividades-rotineiras').dynatable({
                         inputs: {
                             paginationPrev: 'Anterior',
                             paginationNext: 'Próximo',
@@ -33,6 +40,40 @@
                           perPageOptions: [10,20,50,100],
                         },
                     });
+                    $('#atividades-projetizadas').dynatable({
+                        inputs: {
+                            paginationPrev: 'Anterior',
+                            paginationNext: 'Próximo',
+                            paginationText: 'Páginas: ',
+                            perPageText: 'Exibir: ',
+                            searchText: 'Localizar ',
+                            recordCountText: 'Mostrando ',
+                            recordCountToText: ' a ',
+                            recordCountOfText: ' de ',
+                            textFilterFromText: ' (filtrada a partir de ',
+                            textFilterTotalText: ' registros)',
+                        },
+                        params: {
+                            records: 'registros',
+                        },
+                        dataset: {
+                          perPageDefault: 50,
+                          perPageOptions: [10,20,50,100],
+                        },
+                    });
+                    $(function() {
+                        if ($('#projetizada').is(':checked')) {
+                            $( "#periodo" ).show();
+                        }
+                    });
+                    $('#projetizada').change(function() {
+                        if ($(this).is(':checked')) {
+                            $( "#periodo" ).show();
+                        }
+                        if (!$(this).is(':checked')) {
+                            $( "#periodo" ).hide();
+                        }
+                    });
                 });
             </script>
         </metal:headslot>
@@ -45,7 +86,9 @@
                 tal:attributes="action string:${context/absolute_url}"
                 enctype="multipart/form-data"
                 tal:define="errors view/errors">
-                <fieldset>
+                <fieldset
+                        tal:define="os_request python: context.REQUEST.get('ordemServico', None);
+                                    projetizada_request python: context.REQUEST.get('projetizada', None)">
                     <legend>Ordem de Serviço</legend>
                         <div tal:define="error errors/ordem_servico | nothing;"
                             tal:attributes="class python:'field error' if error else 'field'">
@@ -56,33 +99,81 @@
                             </div>
                             <div tal:condition="error" tal:content="error" />
                             <select id="ordemServico" name="ordemServico" tal:define="ordens view/getOS">
-                                <tal:block tal:repeat="os ordens"
-                                    tal:define="or_request python: context.REQUEST.get('ordemServico', None)">
-                                        <tal:block tal:condition="not:or_request">
+                                <tal:block tal:repeat="os ordens">
+                                        <tal:block tal:condition="not:os_request">
                                             <option tal:attributes="value os" tal:content="os">Infraestrutura</option>
                                         </tal:block>
-                                        <tal:block tal:condition="or_request">
+                                        <tal:block tal:condition="os_request">
                                             <option tal:attributes="value os;
-                                                                    selected python: os == or_request;"
+                                                                    selected python: os == os_request;"
                                                     tal:content="os">Infraestrutura</option>
                                         </tal:block>
                                 </tal:block>
                             </select>
                         </div>
+                        <div tal:define="error errors/projetizada | nothing;"
+                            tal:attributes="class python:'field error' if error else 'field'">
+                            <div class="formHelp" i18n:translate=""></div>
+                            <div tal:condition="error" tal:content="error" />
+                            <input type="checkbox"
+                                   id="projetizada"
+                                   name="projetizada"
+                                   value="True"
+                                   tal:attributes="checked python: projetizada_request == 'True'"><b>Projetizada</b>
+                            <div id='periodo' style="display:none;">
+                                <div id="rage-data" class="input-daterange" id="datepicker" data-date-format="dd/mm/yyyy">
+                                    <input type="text"
+                                           class="input-small"
+                                           readonly
+                                           name="start"
+                                           id="start"
+                                           size="10"
+                                           tal:attributes="value start_request|nothing"/>
+                                    <span class="add-on">
+                                        <i class="icon-calendar"></i>
+                                    </span>
+                                    <span class="add-on-to">até</span>
+                                    <input type="text"
+                                           class="input-small"
+                                           readonly
+                                           name="end"
+                                           id="end"
+                                           size="10"
+                                           tal:attributes="value end_request|nothing"/>
+                                    <span class="add-on">
+                                        <i class="icon-calendar"></i>
+                                    </span>
+                                </div>
+                                <script>
+								$(function(){
+									$('#rage-data').datepicker({
+										keyboardNavigation: true,
+										language: "pt-BR",
+										clearBtn: true
+									}).on('changeDate', function(ev){
+										$('#rage-data').datepicker('hide');
+									});
+								});
+							    </script>
+                            </div>
+                        </div>
                         <div style="clear: both;"></div>
                         <input type="submit" name="form.action.ordemServico" value="Pesquisar" />
                 </fieldset>
             </form>
-            <tal:block tal:define="itens view/getDemandas">
+            <tal:block tal:define="itens view/getDemandas;
+                                   atividades python:itens['atividades'];
+                                   demandas python:itens['demanda'];">
                 <fieldset>
                     <legend>Totalização</legend>
                     <p class="totalHST">Total de HTS: <span tal:content="view/getTotalHST"/></p>
                 </fieldset>
-                <fieldset>
-                    <legend>Atividades</legend>
+                <fieldset tal:condition="demandas">
+                    <legend>Atividades rotineiras</legend>
                     <table class="listing"
                            summary="Content listing"
-                           i18n:attributes="summary summary_content_listing;" id="atividades">
+                           i18n:attributes="summary summary_content_listing;"
+                           id="atividades-rotineiras">
                         <thead>
                             <tr>
                                 <th width="35%">Sistema</th>
@@ -96,7 +187,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tal:block repeat="item itens">
+                            <tal:block repeat="item demandas">
                                 <tr>
                                     <td>
                                         <a tal:attributes="href item/getURL" tal:content="item/Title"></a>
@@ -129,12 +220,6 @@
                             </tal:block>
                         </tbody>
                     </table>
-                    <a tal:attributes="href string:${context/absolute_url}/exportExcel?ordemServico=${view/requestOS}"
-                       style="border:none;"
-                       title="Exportar para Excel"
-                       alt="Exportar para Excel">
-                        <img tal:attributes="src string:${context/absolute_url}/++resource++lx.demanda.imagens/export_excel.png" />
-                    </a>
                     <!--<table class="listing" tal:condition="itens" width="100%;" style="margin-top:-15px;">
                         <tr>
                             <th width="85%" style="border: none!important;">Total de HST</th>
@@ -142,6 +227,55 @@
                         </tr>
                     </table>-->
                 </fieldset>
+                <fieldset tal:condition="atividades">
+                    <legend>Atividades projetizadas</legend>
+                    <table class="listing"
+                           summary="Content listing"
+                           i18n:attributes="summary summary_content_listing;"
+                           id="atividades-projetizadas"
+                            style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th width="35%">Atividade</th>
+                                <th width="9%">Projeto</th>
+                                <th>Data início</th>
+                                <th>Data fim</th>
+                                <th>Duração</th>
+                                <th>Quantidade HST</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tal:block repeat="item atividades">
+                                <tr>
+                                    <td>
+                                        <a tal:attributes="href item/getURL" tal:content="item/Title"></a>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span tal:replace="item/projeto"/>
+                                    </td>
+                                    <td tal:define="data_inicio item/data_inicio" style="text-align: center;">
+                                        <span tal:content="python:data_inicio.strftime('%d/%m/%Y %H:%M')"></span>
+                                    </td>
+                                    <td tal:define="data_fim item/data_fim" style="text-align: center;">
+                                        <span tal:content="python:data_fim.strftime('%d/%m/%Y %H:%M')"></span>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span tal:replace="item/duracao"/>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <span tal:replace="item/quantHST"/>
+                                    </td>
+                                </tr>
+                            </tal:block>
+                        </tbody>
+                    </table>
+                </fieldset>
+                <a tal:attributes="href string:${context/absolute_url}/exportExcel?${view/requestOS}"
+                   style="border:none;"
+                   title="Exportar para Excel"
+                   alt="Exportar para Excel">
+                    <img tal:attributes="src string:${context/absolute_url}/++resource++lx.demanda.imagens/export_excel.png" />
+                </a>
             </tal:block>
         </tal:block>
     </body>
