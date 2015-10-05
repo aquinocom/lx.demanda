@@ -126,6 +126,9 @@ class ListaDemandaView(BrowserView):
         atividades = tarefas['atividades']
         demandas = tarefas['demanda']
 
+        if not atividades and not demandas:
+            return '0'
+
         if atividades and demandas:
             lista_tarefas = atividades + demandas
         if atividades and not demandas:
