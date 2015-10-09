@@ -4,6 +4,7 @@ from Products.CMFCore.utils import getToolByName
 from Acquisition import aq_inner
 from plone.memoize.instance import memoize
 from zope.component import getUtility
+from zope.component import getMultiAdapter
 from plone.registry.interfaces import IRegistry
 from Acquisition import aq_parent
 #Libs python
@@ -71,9 +72,28 @@ class SubProcessosView(BrowserView):
         ordens_servicos = tuple(' ')
         try:
             ordens_servicos = ordens_servicos + settings.ordem_servico
+            if ordens_servicos:
+                lista_os = []
+                for i in ordens_servicos:
+                    lista_os.append(i)
+                if not self.autenticado():
+                    lista_os.remove('---')
+            ordens_servicos = lista_os
         except:
             ordens_servicos = ordens_servicos
         return ordens_servicos
+
+    @memoize
+    def autenticado(self):
+        """Retorna True(verdadeiro) se o usuário estiver autenticado.
+        """
+        portal_state = getMultiAdapter((self.context, self.request),
+                                        name=u'plone_portal_state')
+
+        if not portal_state.anonymous():
+            return True
+        else:
+            return False
 
     @memoize
     def getTotalHST(self):

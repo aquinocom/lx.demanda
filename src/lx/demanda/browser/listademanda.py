@@ -2,6 +2,7 @@
 
 # Zope3 imports
 from zope.component import getUtility
+from zope.component import getMultiAdapter
 from Acquisition import aq_inner
 
 # Product imports
@@ -35,6 +36,19 @@ class ListaDemandaView(BrowserView):
         if 'form.action.ordemServico' in self.request.form:
             if self.validateOrdemServico():
                 return self.getDemandas()
+
+
+    @memoize
+    def autenticado(self):
+        """Retorna True(verdadeiro) se o usuário estiver autenticado.
+        """
+        portal_state = getMultiAdapter((self.context, self.request),
+                                        name=u'plone_portal_state')
+
+        if not portal_state.anonymous():
+            return True
+        else:
+            return False
 
     @memoize
     def validateOrdemServico(self):
@@ -150,6 +164,13 @@ class ListaDemandaView(BrowserView):
         ordens_servicos = tuple()
         try:
             ordens_servicos = ordens_servicos + settings.ordem_servico
+            if ordens_servicos:
+                lista_os = []
+                for i in ordens_servicos:
+                    lista_os.append(i)
+                if not self.autenticado():
+                    lista_os.remove('---')
+            ordens_servicos = lista_os
         except:
             ordens_servicos = ordens_servicos
         return ordens_servicos

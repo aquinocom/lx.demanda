@@ -111,52 +111,54 @@
                                 </tal:block>
                             </select>
                         </div>
-                        <div tal:define="error errors/projetizada | nothing;"
-                            tal:attributes="class python:'field error' if error else 'field'">
-                            <div class="formHelp" i18n:translate=""></div>
-                            <div tal:condition="error" tal:content="error" />
-                            <input type="checkbox"
-                                   id="projetizada"
-                                   name="projetizada"
-                                   value="True"
-                                   tal:attributes="checked python: projetizada_request == 'True'"><b>Projetizada</b>
-                            <div id='periodo' style="display:none;">
-                                <div id="rage-data" class="input-daterange" id="datepicker" data-date-format="dd/mm/yyyy">
-                                    <input type="text"
-                                           class="input-small"
-                                           readonly
-                                           name="start"
-                                           id="start"
-                                           size="10"
-                                           tal:attributes="value start_request|nothing"/>
-                                    <span class="add-on">
-                                        <i class="icon-calendar"></i>
-                                    </span>
-                                    <span class="add-on-to">até</span>
-                                    <input type="text"
-                                           class="input-small"
-                                           readonly
-                                           name="end"
-                                           id="end"
-                                           size="10"
-                                           tal:attributes="value end_request|nothing"/>
-                                    <span class="add-on">
-                                        <i class="icon-calendar"></i>
-                                    </span>
+                        <tal:condition tal:condition="view/autenticado">
+                            <div tal:define="error errors/projetizada | nothing;"
+                                tal:attributes="class python:'field error' if error else 'field'">
+                                <div class="formHelp" i18n:translate=""></div>
+                                <div tal:condition="error" tal:content="error" />
+                                <input type="checkbox"
+                                       id="projetizada"
+                                       name="projetizada"
+                                       value="True"
+                                       tal:attributes="checked python: projetizada_request == 'True'"><b>Projetizada</b>
+                                <div id='periodo' style="display:none;">
+                                    <div id="rage-data" class="input-daterange" id="datepicker" data-date-format="dd/mm/yyyy">
+                                        <input type="text"
+                                               class="input-small"
+                                               readonly
+                                               name="start"
+                                               id="start"
+                                               size="10"
+                                               tal:attributes="value start_request|nothing"/>
+                                        <span class="add-on">
+                                            <i class="icon-calendar"></i>
+                                        </span>
+                                        <span class="add-on-to">até</span>
+                                        <input type="text"
+                                               class="input-small"
+                                               readonly
+                                               name="end"
+                                               id="end"
+                                               size="10"
+                                               tal:attributes="value end_request|nothing"/>
+                                        <span class="add-on">
+                                            <i class="icon-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <script>
+                                    $(function(){
+                                        $('#rage-data').datepicker({
+                                            keyboardNavigation: true,
+                                            language: "pt-BR",
+                                            clearBtn: true
+                                        }).on('changeDate', function(ev){
+                                            $('#rage-data').datepicker('hide');
+                                        });
+                                    });
+                                    </script>
                                 </div>
-                                <script>
-								$(function(){
-									$('#rage-data').datepicker({
-										keyboardNavigation: true,
-										language: "pt-BR",
-										clearBtn: true
-									}).on('changeDate', function(ev){
-										$('#rage-data').datepicker('hide');
-									});
-								});
-							    </script>
                             </div>
-                        </div>
+                        </tal:condition>
                         <div style="clear: both;"></div>
                         <input type="submit" name="form.action.ordemServico" value="Pesquisar" />
                 </fieldset>
@@ -173,7 +175,8 @@
                     <table class="listing"
                            summary="Content listing"
                            i18n:attributes="summary summary_content_listing;"
-                           id="atividades-rotineiras">
+                           id="atividades-rotineiras"
+                           style="width:100%;">
                         <thead>
                             <tr>
                                 <th width="35%">Sistema</th>
@@ -233,7 +236,7 @@
                            summary="Content listing"
                            i18n:attributes="summary summary_content_listing;"
                            id="atividades-projetizadas"
-                            style="width:100%;">
+                           style="width:100%;">
                         <thead>
                             <tr>
                                 <th width="35%">Atividade</th>
