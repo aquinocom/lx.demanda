@@ -6,6 +6,32 @@
     metal:use-macro="context/main_template/macros/master"
     i18n:domain="lx.LES">
     <head>
+        <metal:headslot metal:fill-slot="head_slot">
+			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker-bootstrap-filtro.css"/>
+			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker.css"/>
+			<!--<script type="text/javascript" tal:attributes="src string:${context/portal_url}/jquery-1.11.2.min.js"></script>-->
+			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.js"></script>
+			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.pt-BR.js"></script>
+
+            <script tal:attributes="src string:${context/portal_url}/jquery.dynatable.js"></script>
+            <script type="text/javascript">
+                $(document).ready( function() {
+                    $(function() {
+                        if ($('#projetizada').is(':checked')) {
+                            $( "#periodo" ).show();
+                        }
+                    });
+                    $('#projetizada').change(function() {
+                        if ($(this).is(':checked')) {
+                            $( "#periodo" ).show();
+                        }
+                        if (!$(this).is(':checked')) {
+                            $( "#periodo" ).hide();
+                        }
+                    });
+                });
+            </script>
+        </metal:headslot>
     </head>
     <body>
         <tal:block metal:fill-slot="main"
@@ -15,37 +41,89 @@
                 tal:attributes="action string:${context/absolute_url}/controledemanda"
                 enctype="multipart/form-data"
                 tal:define="errors view/errors">
-                <fieldset>
+                <fieldset
+                        tal:define="os_request python: context.REQUEST.get('ordemServico', None);
+                                    projetizada_request python: context.REQUEST.get('projetizada', None);
+                                    start_request python: context.REQUEST.get('start', None);
+                                    end_request python: context.REQUEST.get('end', None);">
                     <legend>Ordem de Serviço</legend>
                         <div tal:define="error errors/ordem_servico | nothing;"
                             tal:attributes="class python:'field error' if error else 'field'">
                             <label for="ordem_servico " i18n:translate="">Ordem de Serviço</label>
-                            <span class="fieldRequired" i18n:translate="">(Obrigatório)</span>
+                            <!--<span class="fieldRequired" i18n:translate="">(Obrigatório)</span>-->
                             <div class="formHelp" i18n:translate="">
                                 Selecione a ordem de serviço.
                             </div>
                             <div tal:condition="error" tal:content="error" />
                             <select id="ordemServico" name="ordemServico" tal:define="ordens view/getOS">
-                                <tal:block tal:repeat="os ordens"
-                                    tal:define="or_request python: context.REQUEST.get('ordemServico', None)">
-                                        <tal:block tal:condition="not:or_request">
+                                <tal:block tal:repeat="os ordens">
+                                        <tal:block tal:condition="not:os_request">
                                             <option tal:attributes="value os" tal:content="os">Infraestrutura</option>
                                         </tal:block>
-                                        <tal:block tal:condition="or_request">
+                                        <tal:block tal:condition="os_request">
                                             <option tal:attributes="value os;
-                                                                    selected python: os == or_request;"
+                                                                    selected python: os == os_request;"
                                                     tal:content="os">Infraestrutura</option>
                                         </tal:block>
                                 </tal:block>
                             </select>
+                        </div>
+
+                        <div tal:define="error errors/projetizada | nothing;"
+                            tal:attributes="class python:'field error' if error else 'field'">
+                            <div class="formHelp" i18n:translate=""></div>
+                            <div tal:condition="error" tal:content="error" />
+                            <input type="checkbox"
+                                   id="projetizada"
+                                   name="projetizada"
+                                   value="True"
+                                   tal:attributes="checked python: projetizada_request == 'True'"><b>Projetizada</b>
+                            <div id='periodo' style="display:none;">
+                                <div id="rage-data" class="input-daterange" id="datepicker" data-date-format="dd/mm/yyyy">
+                                    <input type="text"
+                                           class="input-small"
+                                           readonly
+                                           name="start"
+                                           id="start"
+                                           size="10"
+                                           tal:attributes="value start_request|nothing"/>
+                                    <span class="add-on">
+                                        <i class="icon-calendar"></i>
+                                    </span>
+                                    <span class="add-on-to">até</span>
+                                    <input type="text"
+                                           class="input-small"
+                                           readonly
+                                           name="end"
+                                           id="end"
+                                           size="10"
+                                           tal:attributes="value end_request|nothing"/>
+                                    <span class="add-on">
+                                        <i class="icon-calendar"></i>
+                                    </span>
+                                </div>
+                                <script>
+                                $(function(){
+                                    $('#rage-data').datepicker({
+                                        keyboardNavigation: true,
+                                        language: "pt-BR",
+                                        clearBtn: true
+                                    }).on('changeDate', function(ev){
+                                        $('#rage-data').datepicker('hide');
+                                    });
+                                });
+                                </script>
+                            </div>
                         </div>
                         <div style="clear: both;"></div>
                         <input type="submit" name="form.action.ordemServico" value="Pesquisar" />
                 </fieldset>
             </form>
             <table class="listing"
-                summary="Content listing"
-                i18n:attributes="summary summary_content_listing;">
+                   summary="Content listing"
+                   i18n:attributes="summary summary_content_listing;"
+                   tal:define="colabs view/getColaboradores"
+                   tal:condition="colabs">
                 <thead>
                     <tr>
                         <th>Colaborador</th>
@@ -53,60 +131,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tal:block tal:repeat="colab view/getColaborador">
-                        <tal:block tal:define="totalHST python: view.getTotalHST(colab)">
-                            <tr>
-                                <td>
-                                    <a tal:attributes="href colab/getURL" tal:content="colab/Title"></a>
-                                </td>
-                                <td tal:content="totalHST" style="text-align: center;">
-                                    
-                                </td>
-                            </tr>
-                        </tal:block>
+                    <tal:block tal:repeat="colab colabs">
+                        <tr>
+                            <td>
+                                <a tal:attributes="href colab/url" tal:content="colab/nome"></a>
+                            </td>
+                            <td tal:content="colab/total" style="text-align: center;">
+
+                            </td>
+                        </tr>
                     </tal:block>
                 </tbody>
             </table>
-            <!--<tal:block tal:repeat="colab view/getColaborador">
-                <tal:block tal:define="totalHST python: view.getTotalHST(colab)">
-                    <h1><span tal:replace="colab/Title"/> - (<span tal:replace="totalHST"/> HST)</h1>
-                    <table class="listing" tal:define="itens python:view.getDemandas(colab)">
-                        <tbody>
-                            <tr>
-                                <th>Sistema</th>
-                                <th>Atividade</th>
-                                <th>Deflator</th>
-                                <th>Quantidade HST</th>
-                            </tr>
-                            <tal:block repeat="item itens">
-                                <tr>
-                                    <td>
-                                        <a tal:attributes="href item/getURL" tal:content="item/Title"></a>
-                                    </td>
-                                    <td tal:content="item/atividade" style="text-align: center;"></td>
-                                    <td style="text-align: center;">
-                                        <tal:block tal:condition="item/deflator">
-                                            <span tal:replace="item/valor_deflator"/>
-                                        </tal:block>
-                                    </td>
-                                    <td style="text-align: center;">
-                                        <tal:block tal:condition="item/deflator">
-                                            <span tal:content="python: (float(item.complexidade) * item.multiplicador) * float(item.valor_deflator)" />
-                                        </tal:block>
-                                        <tal:block tal:condition="not:item/deflator">
-                                            <span tal:content="python: float(item.complexidade) * item.multiplicador" />
-                                        </tal:block>
-                                    </td>
-                                </tr>
-                            </tal:block>
-                            <tr>
-                                <th colspan="3">Total de HST</th>
-                                <th tal:content="totalHST" style="text-align: center;"></th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </tal:block>
-            </tal:block>-->
         </tal:block>
     </body>
 </html>

@@ -88,7 +88,9 @@
                 tal:define="errors view/errors">
                 <fieldset
                         tal:define="os_request python: context.REQUEST.get('ordemServico', None);
-                                    projetizada_request python: context.REQUEST.get('projetizada', None)">
+                                    projetizada_request python: context.REQUEST.get('projetizada', None);
+                                    start_request python: context.REQUEST.get('start', None);
+                                    end_request python: context.REQUEST.get('end', None);">
                     <legend>Ordem de Serviço</legend>
                         <div tal:define="error errors/ordem_servico | nothing;"
                             tal:attributes="class python:'field error' if error else 'field'">
@@ -111,54 +113,53 @@
                                 </tal:block>
                             </select>
                         </div>
-                        <tal:condition tal:condition="view/autenticado">
-                            <div tal:define="error errors/projetizada | nothing;"
-                                tal:attributes="class python:'field error' if error else 'field'">
-                                <div class="formHelp" i18n:translate=""></div>
-                                <div tal:condition="error" tal:content="error" />
-                                <input type="checkbox"
-                                       id="projetizada"
-                                       name="projetizada"
-                                       value="True"
-                                       tal:attributes="checked python: projetizada_request == 'True'"><b>Projetizada</b>
-                                <div id='periodo' style="display:none;">
-                                    <div id="rage-data" class="input-daterange" id="datepicker" data-date-format="dd/mm/yyyy">
-                                        <input type="text"
-                                               class="input-small"
-                                               readonly
-                                               name="start"
-                                               id="start"
-                                               size="10"
-                                               tal:attributes="value start_request|nothing"/>
-                                        <span class="add-on">
-                                            <i class="icon-calendar"></i>
-                                        </span>
-                                        <span class="add-on-to">até</span>
-                                        <input type="text"
-                                               class="input-small"
-                                               readonly
-                                               name="end"
-                                               id="end"
-                                               size="10"
-                                               tal:attributes="value end_request|nothing"/>
-                                        <span class="add-on">
-                                            <i class="icon-calendar"></i>
-                                        </span>
-                                    </div>
-                                    <script>
-                                    $(function(){
-                                        $('#rage-data').datepicker({
-                                            keyboardNavigation: true,
-                                            language: "pt-BR",
-                                            clearBtn: true
-                                        }).on('changeDate', function(ev){
-                                            $('#rage-data').datepicker('hide');
-                                        });
-                                    });
-                                    </script>
+
+                        <div tal:define="error errors/projetizada | nothing;"
+                            tal:attributes="class python:'field error' if error else 'field'">
+                            <div class="formHelp" i18n:translate=""></div>
+                            <div tal:condition="error" tal:content="error" />
+                            <input type="checkbox"
+                                   id="projetizada"
+                                   name="projetizada"
+                                   value="True"
+                                   tal:attributes="checked python: projetizada_request == 'True'"><b>Projetizada</b>
+                            <div id='periodo' style="display:none;">
+                                <div id="rage-data" class="input-daterange" id="datepicker" data-date-format="dd/mm/yyyy">
+                                    <input type="text"
+                                           class="input-small"
+                                           readonly
+                                           name="start"
+                                           id="start"
+                                           size="10"
+                                           tal:attributes="value start_request|nothing"/>
+                                    <span class="add-on">
+                                        <i class="icon-calendar"></i>
+                                    </span>
+                                    <span class="add-on-to">até</span>
+                                    <input type="text"
+                                           class="input-small"
+                                           readonly
+                                           name="end"
+                                           id="end"
+                                           size="10"
+                                           tal:attributes="value end_request|nothing"/>
+                                    <span class="add-on">
+                                        <i class="icon-calendar"></i>
+                                    </span>
                                 </div>
+                                <script>
+                                $(function(){
+                                    $('#rage-data').datepicker({
+                                        keyboardNavigation: true,
+                                        language: "pt-BR",
+                                        clearBtn: true
+                                    }).on('changeDate', function(ev){
+                                        $('#rage-data').datepicker('hide');
+                                    });
+                                });
+                                </script>
                             </div>
-                        </tal:condition>
+                        </div>
                         <div style="clear: both;"></div>
                         <input type="submit" name="form.action.ordemServico" value="Pesquisar" />
                 </fieldset>
