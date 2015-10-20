@@ -28,11 +28,11 @@
                     <tr>
                         <td tal:content="context/projeto">
                         </td>
-                        <td tal:define="data_inicio context/data_inicio" tal:condition="data_inicio">
-                            <span tal:content="python:data_inicio.strftime('%d/%m/%Y %H:%M')"></span>
+                        <td>
+                            <span tal:content="python:view.getData('inicio')"></span>
                         </td>
-                        <td tal:define="data_fim context/data_fim" tal:condition="data_fim">
-                            <span tal:content="python:data_fim.strftime('%d/%m/%Y %H:%M')"></span>
+                        <td>
+                            <span tal:content="python:view.getData('fim')"></span>
                         </td>
                         <td tal:content="context/duracao">
                         </td>
