@@ -257,56 +257,62 @@ class Demanda(ATCTContent, HistoryAwareMixin):
 
     def getComplexidades(self, id):
         listComplexidade = DisplayList()
-        try:
-            url = self.getURLWebservice()
-            client = Client(url)
-            filtro = client.factory.create('wsFiltros')
-            filtro.tipoServico.id = self.idTipoServico
-            filtro.tipoServico.sigla = self.siglaTipoServico
-            filtro.codigoAtividade = id
-            search = client.service.consultarAtividades(filtro)
-            complexidades = search.item[0].listAtividade[0].listComplexidade
-            if complexidades.__len__() > 0:
-                for complexidade in complexidades:
-                    quantidade = str(complexidade.quantidade)
-                    descricao = getattr(complexidade, 'descricao', '')
-                    nome = complexidade.nome + ' - ' + descricao + ' - ' + quantidade + 'HST'
-                    listComplexidade.add(quantidade, nome)
-            return listComplexidade
-        except:
-            return listComplexidade
+        if id != '' and id != 'null':
+            try:
+                url = self.getURLWebservice()
+                client = Client(url)
+                filtro = client.factory.create('wsFiltros')
+                filtro.tipoServico.id = self.idTipoServico
+                filtro.tipoServico.sigla = self.siglaTipoServico
+                filtro.codigoAtividade = id
+                search = client.service.consultarAtividades(filtro)
+                complexidades = search.item[0].listAtividade[0].listComplexidade
+                if complexidades.__len__() > 0:
+                    for complexidade in complexidades:
+                        quantidade = str(complexidade.quantidade)
+                        descricao = getattr(complexidade, 'descricao', '')
+                        nome = complexidade.nome + ' - ' + descricao + ' - ' + quantidade + 'HST'
+                        listComplexidade.add(quantidade, nome)
+                return listComplexidade
+            except:
+                return listComplexidade
+        return listComplexidade
 
     def getProdutos(self, id):
         text = ''
-        try:
-            url = self.getURLWebservice()
-            client = Client(url)
-            filtro = client.factory.create('wsFiltros')
-            filtro.tipoServico.id = self.idTipoServico
-            filtro.tipoServico.sigla = self.siglaTipoServico
-            filtro.codigoAtividade = id
-            search = client.service.consultarAtividades(filtro)
-            produtos = search.item[0].listAtividade[0].listProduto
-            if produtos.__len__() > 0:
-                for produto in produtos:
-                    text = text + getattr(produto, 'descricao', '')
-            return text
-        except:
-            return text
+        if id != '' and id != 'null':
+            try:
+                url = self.getURLWebservice()
+                client = Client(url)
+                filtro = client.factory.create('wsFiltros')
+                filtro.tipoServico.id = self.idTipoServico
+                filtro.tipoServico.sigla = self.siglaTipoServico
+                filtro.codigoAtividade = id
+                search = client.service.consultarAtividades(filtro)
+                produtos = search.item[0].listAtividade[0].listProduto
+                if produtos.__len__() > 0:
+                    for produto in produtos:
+                        text = text + getattr(produto, 'descricao', '')
+                return text
+            except:
+                return text
+        return text
 
     def getVlDeflator(self, id):
-        try:
-            url = self.getURLWebservice()
-            client = Client(url)
-            filtro = client.factory.create('wsFiltros')
-            filtro.tipoServico.id = self.idTipoServico
-            filtro.tipoServico.sigla = self.siglaTipoServico
-            filtro.codigoAtividade = id
-            search = client.service.consultarAtividades(filtro)
-            deflator = search.item[0].listAtividade[0].deflator
-            return deflator
-        except:
-            return 1.0
+        if id != '' and id != 'null':
+            try:
+                url = self.getURLWebservice()
+                client = Client(url)
+                filtro = client.factory.create('wsFiltros')
+                filtro.tipoServico.id = self.idTipoServico
+                filtro.tipoServico.sigla = self.siglaTipoServico
+                filtro.codigoAtividade = id
+                search = client.service.consultarAtividades(filtro)
+                deflator = search.item[0].listAtividade[0].deflator
+                return deflator
+            except:
+                return 1.0
+        return 1.0
 
     #def quantHST(self):
     #    pass
