@@ -351,18 +351,18 @@ class Demanda(ATCTContent, HistoryAwareMixin):
         self.reindexObject(idxs='quantHST')
 
     def getOS(self):
-        #obj = self
-        #while True:
-        #    obj = obj.aq_parent
-        #    obj_type = obj.portal_type
-        #    if obj.portal_type == 'Secao':
-        #        break
+        obj = self
+        while True:
+           obj = obj.aq_parent
+           obj_type = obj.portal_type
+           if obj.portal_type == 'Secao':
+               break
         # import pdb; pdb.set_trace()
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ICatalogoServicoPrefsForm)
+        # registry = getUtility(IRegistry)
+        # settings = registry.forInterface(ICatalogoServicoPrefsForm)
         try:
-            #ordens_servicos = obj.lista_os
-            ordens_servicos = settings.ordem_servico
+            ordens_servicos = obj.lista_os
+            #ordens_servicos = settings.ordem_servico
         except:
             ordens_servicos = tuple(' ')
         return ordens_servicos
