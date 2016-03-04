@@ -86,11 +86,12 @@ class ListaDemandaOSView(BrowserView):
 
     @memoize
     def getOS(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ICatalogoServicoPrefsForm)
+        # registry = getUtility(IRegistry)
+        # settings = registry.forInterface(ICatalogoServicoPrefsForm)
         ordens_servicos = tuple()
         try:
-            ordens_servicos = ordens_servicos + settings.ordem_servico
+            # ordens_servicos = ordens_servicos + settings.ordem_servico
+            ordens_servicos = ordens_servicos + self.context.aq_parent.lista_os
         except:
             ordens_servicos = ordens_servicos
         return ordens_servicos

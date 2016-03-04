@@ -7,6 +7,7 @@ from zope.component import getUtility
 from AccessControl import ClassSecurityInfo
 
 # Archetypes & ATCT imports
+from Acquisition import aq_inner, aq_parent
 from Products.MasterSelectWidget.MasterSelectWidget import MasterSelectWidget
 from Products.Archetypes.utils import DisplayList
 from Products.Archetypes import atapi
@@ -350,9 +351,17 @@ class Demanda(ATCTContent, HistoryAwareMixin):
         self.reindexObject(idxs='quantHST')
 
     def getOS(self):
+        #obj = self
+        #while True:
+        #    obj = obj.aq_parent
+        #    obj_type = obj.portal_type
+        #    if obj.portal_type == 'Secao':
+        #        break
+        # import pdb; pdb.set_trace()
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ICatalogoServicoPrefsForm)
         try:
+            #ordens_servicos = obj.lista_os
             ordens_servicos = settings.ordem_servico
         except:
             ordens_servicos = tuple(' ')

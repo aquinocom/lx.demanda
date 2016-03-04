@@ -11,3 +11,8 @@ class IDemanda(Interface):
 class IAtividade(Interface):
     """Marker interface
     """
+
+
+class ISecao(Interface):
+    """Marker interface
+    """

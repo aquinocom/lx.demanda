@@ -12,5 +12,6 @@
     <!-- -*- extra stuff goes here -*- -->
     <type portal_type="Demanda"/>
     <type portal_type="Atividade"/>
+    <type portal_type="Secao"/>
   </factorytypes>
 </object>

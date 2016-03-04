@@ -159,11 +159,13 @@ class ListaDemandaView(BrowserView):
 
     @memoize
     def getOS(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ICatalogoServicoPrefsForm)
+        #import pdb; pdb.set_trace()
+        #registry = getUtility(IRegistry)
+        #settings = registry.forInterface(ICatalogoServicoPrefsForm)
         ordens_servicos = tuple()
         try:
-            ordens_servicos = ordens_servicos + settings.ordem_servico
+            # ordens_servicos = ordens_servicos + settings.ordem_servico
+            ordens_servicos = ordens_servicos + self.context.aq_parent.lista_os
             if ordens_servicos:
                 lista_os = []
                 for i in ordens_servicos:

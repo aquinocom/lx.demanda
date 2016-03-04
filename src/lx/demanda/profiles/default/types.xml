@@ -12,5 +12,7 @@
             meta_type="Factory-based Type Information with dynamic views" />
     <object name="Atividade"
             meta_type="Factory-based Type Information with dynamic views" />
+    <object name="Secao"
+            meta_type="Factory-based Type Information with dynamic views" />
     <object name="colaborador" meta_type="Dexterity FTI"/>
 </object>

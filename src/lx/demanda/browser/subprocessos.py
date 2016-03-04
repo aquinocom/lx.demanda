@@ -67,11 +67,12 @@ class SubProcessosView(BrowserView):
 
     @memoize
     def getOrdemServico(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ICatalogoServicoPrefsForm)
+        #registry = getUtility(IRegistry)
+        #settings = registry.forInterface(ICatalogoServicoPrefsForm)
         ordens_servicos = tuple(' ')
         try:
-            ordens_servicos = ordens_servicos + settings.ordem_servico
+            #ordens_servicos = ordens_servicos + settings.ordem_servico
+            ordens_servicos = ordens_servicos + self.context.lista_os
             if ordens_servicos:
                 lista_os = []
                 for i in ordens_servicos:
