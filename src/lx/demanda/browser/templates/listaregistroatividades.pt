@@ -1,0 +1,194 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    lang="en"
+    metal:use-macro="context/main_template/macros/master"
+    i18n:domain="lx.LES">
+    <head>
+        <metal:headslot metal:fill-slot="head_slot">
+			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker-bootstrap-filtro.css"/>
+			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker.css"/>
+            <link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/jquery.dynatable.css">
+            <link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/tabela.css">
+
+			<!--<script type="text/javascript" tal:attributes="src string:${context/portal_url}/jquery-1.11.2.min.js"></script>-->
+			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.js"></script>
+			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.pt-BR.js"></script>
+
+            <script tal:attributes="src string:${context/portal_url}/jquery.dynatable.js"></script>
+            <script type="text/javascript">
+                $(document).ready( function() {
+                    $('#atividades-rotineiras').dynatable({
+                        inputs: {
+                            paginationPrev: 'Anterior',
+                            paginationNext: 'Próximo',
+                            paginationText: 'Páginas: ',
+                            perPageText: 'Exibir: ',
+                            searchText: 'Localizar ',
+                            recordCountText: 'Mostrando ',
+                            recordCountToText: ' a ',
+                            recordCountOfText: ' de ',
+                            textFilterFromText: ' (filtrada a partir de ',
+                            textFilterTotalText: ' registros)',
+                        },
+                        params: {
+                            records: 'registros',
+                        },
+                        dataset: {
+                          perPageDefault: 50,
+                          perPageOptions: [10,20,50,100],
+                        },
+                    });
+                    $('#atividades-projetizadas').dynatable({
+                        inputs: {
+                            paginationPrev: 'Anterior',
+                            paginationNext: 'Próximo',
+                            paginationText: 'Páginas: ',
+                            perPageText: 'Exibir: ',
+                            searchText: 'Localizar ',
+                            recordCountText: 'Mostrando ',
+                            recordCountToText: ' a ',
+                            recordCountOfText: ' de ',
+                            textFilterFromText: ' (filtrada a partir de ',
+                            textFilterTotalText: ' registros)',
+                        },
+                        params: {
+                            records: 'registros',
+                        },
+                        dataset: {
+                          perPageDefault: 50,
+                          perPageOptions: [10,20,50,100],
+                        },
+                    });
+                    $(function() {
+                        if ($('#projetizada').is(':checked')) {
+                            $( "#periodo" ).show();
+                        }
+                    });
+                    $('#projetizada').change(function() {
+                        if ($(this).is(':checked')) {
+                            $( "#periodo" ).show();
+                        }
+                        if (!$(this).is(':checked')) {
+                            $( "#periodo" ).hide();
+                        }
+                    });
+                });
+            </script>
+        </metal:headslot>
+    </head>
+    <body>
+        <tal:block metal:fill-slot="main">
+            <h1 tal:content="context/Title"></h1>
+            <form method="post"
+                tal:attributes="action string:${context/absolute_url}/listaregistroatividades"
+                enctype="multipart/form-data"
+                tal:define="errors view/errors">
+                <fieldset
+                        tal:define="os_request python: context.REQUEST.get('ordemServico', None);
+                                    ano_request python: context.REQUEST.get('anoOS', None);">
+                    <legend>Ordem de Serviço</legend>
+                    <table>
+                        <tr>
+                            <td width="200px">
+                                <div tal:define="error errors/ordem_servico | nothing;"
+                                    tal:attributes="class python:'field error' if error else 'field'">
+                                    <label for="ordem_servico " i18n:translate="">Ordem de Serviço</label>
+                                    <span class="fieldRequired" i18n:translate="">(Obrigatório)</span>
+                                    <div class="formHelp" i18n:translate="">
+                                        Informe o número da ordem de serviço: Ex. 0163
+                                    </div>
+                                    <div tal:condition="error" tal:content="error" />
+                                    <input id="ordemServico" name="ordemServico" type="text" tal:attributes="value os_request|nothing" size="10"/>
+                                </div>
+                            </td>
+                            <td width="200px" style="padding-left:10px;">
+                                <div tal:define="error errors/ano | nothing;"
+                                    tal:attributes="class python:'field error' if error else 'field'">
+                                    <label for="ano " i18n:translate="">Ano</label>
+                                    <span class="fieldRequired" i18n:translate="">(Obrigatório)</span>
+                                    <div class="formHelp" i18n:translate="">
+                                        Informe o ano da ordem de serviço: Ex. 2016
+                                    </div>
+                                    <div tal:condition="error" tal:content="error" />
+                                    <input id="anoOS" name="anoOS" type="text" tal:attributes="value ano_request|nothing" size="10"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                        <div style="clear: both;"></div>
+                        <input type="submit" name="form.enviar" value="Pesquisar" />
+                    <tal:block tal:define="ras view/lista" condition="ras">
+                        <p><br/></p>
+                        <table class="listing"
+                               summary="Content listing"
+                               i18n:attributes="summary summary_content_listing;"
+                               id="atividades-rotineiras"
+                               style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Sistema</th>
+                                    <th>Ordem de Serviço</th>
+                                    <th>RA</th>
+                                    <th>Status</th>
+                                    <th>Atividade</th>
+                                    <th>Multiplicador</th>
+                                    <th>Deflator</th>
+                                    <th>Eng. Rev.</th>
+                                    <th>Orig. Demana</th>
+                                    <th>Und. Cliente</th>
+                                    <th>Und. Executora</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tal:block repeat="ra ras">
+                                    <tr>
+                                        <td>
+                                            <span tal:content="ra/SistemaSigla"/>
+                                        </td>
+                                        <td style="text-align:center;">
+                                            <span tal:content="ra/OrdemServico"/>
+                                        </td>
+                                        <td>
+                                            <!--<span tal:content="ra/ra"/>-->
+                                            <span tal:replace="structure ra/TaskURL"/>
+                                        </td>
+                                        <td>
+                                            <span tal:content="ra/Status"/>
+                                        </td>
+                                        <td style="text-align:center;">
+                                            <span tal:content="ra/CodigoAtividade"/>
+                                        </td>
+                                        <td style="text-align:center;">
+                                            <span tal:content="ra/Multiplicador"/>
+                                        </td>
+                                        <td tal:define="isDeflator ra/IncideDeflator">
+                                            <tal:block condition="isDeflator">
+                                                <span tal:content="ra/Deflator"/>
+                                            </tal:block>
+                                        </td>
+                                        <td tal:define="isEngenhariaReversa ra/EngenhariaReversa">
+                                            <tal:block condition="isEngenhariaReversa">
+                                                <span>Sim</span>
+                                            </tal:block>
+                                        </td>
+                                        <td>
+                                            <span tal:content="ra/OrigemDaDemana"/>
+                                        </td>
+                                        <td>
+                                            <span tal:content="ra/UnidadeClienteSigla"/>
+                                        </td>
+                                        <td>
+                                            <span tal:content="ra/UnidadeExecutoraSigla"/>
+                                        </td>
+                                    </tr>
+                                </tal:block>
+                            </tbody>
+                        </table>
+                    </tal:block>
+                </fieldset>
+            </form>
+        </tal:block>
+    </body>
+</html>
