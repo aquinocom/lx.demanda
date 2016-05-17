@@ -130,7 +130,7 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="11">Total</th>
+                                        <th colspan="13">Total</th>
                                         <th>
                                             <span tal:content="view/getTotalGeralHST"/>
                                         </th>
