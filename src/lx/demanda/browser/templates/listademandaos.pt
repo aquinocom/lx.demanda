@@ -138,6 +138,11 @@
                         <input type="submit" name="form.action.ordemServico" value="Pesquisar" />
                 </fieldset>
             </form>
+            <p style="text-align:right;">
+                <a tal:attributes="href string:${context/absolute_url}/listaregistroatividades" style="text-decoration:none; border-bottom:none;">
+                    Registro de Atividades
+                </a>
+            </p>
             <tal:block tal:define="itens view/getDemandas">
                 <fieldset>
                     <legend>Totalização</legend>
