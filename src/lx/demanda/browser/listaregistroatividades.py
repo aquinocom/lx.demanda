@@ -81,6 +81,10 @@ class ListaRegistroAtividadesView(BrowserView):
             try:
                 for i in items['RegistrosDeAtividades']['RegistroAtividade']:
                     if self.context.email == i['UsuarioSolicitante']:
+                        try:
+                            OrigemDaDemana = i['OrigemDaDemana']
+                        except:
+                            OrigemDaDemana = ''
                         dic = {
                             'ra':  i['ProcessID'],
                             'Status': i['Status'],
@@ -92,7 +96,7 @@ class ListaRegistroAtividadesView(BrowserView):
                             'Deflator': i['Deflator'],
                             'Multiplicador': i['Multiplicador'],
                             'EngenhariaReversa': i['EngenhariaReversa'],
-                            'OrigemDaDemana': i['OrigemDaDemana'],
+                            'OrigemDaDemana': OrigemDaDemana,
                             'TaskURL': i['TaskURL'],
                             'UnidadeClienteSigla': i['UnidadeClienteSigla'],
                             'UnidadeExecutoraSigla': i['UnidadeExecutoraSigla'],
