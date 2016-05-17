@@ -114,6 +114,8 @@
                                     <tr>
                                         <th>Sistema</th>
                                         <th>Orig. Demana</th>
+                                        <th>Und. Cliente</th>
+                                        <th>Und. Executora</th>
                                         <th>Ordem de Serviço</th>
                                         <th>RA</th>
                                         <th>Status</th>
@@ -124,8 +126,6 @@
                                         <th>Deflator</th>
                                         <th>Eng. Rev.</th>
                                         <th>Total HST</th>
-                                        <!--<th>Und. Cliente</th>-->
-                                        <!--<th>Und. Executora</th>-->
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -144,6 +144,12 @@
                                             </td>
                                             <td>
                                                 <span tal:content="ra/OrigemDaDemana"/>
+                                            </td>
+                                            <td>
+                                                <span tal:content="ra/UnidadeClienteSigla"/>
+                                            </td>
+                                            <td>
+                                                <span tal:content="ra/UnidadeExecutoraSigla"/>
                                             </td>
                                             <td style="text-align:center;">
                                                 <span tal:content="ra/OrdemServico"/>
@@ -180,12 +186,6 @@
                                             <td>
                                                 <span tal:content="ra/totalHST"/>
                                             </td>
-                                            <!--<td>-->
-                                                <!--<span tal:content="ra/UnidadeClienteSigla"/>-->
-                                            <!--</td>-->
-                                            <!--<td>-->
-                                                <!--<span tal:content="ra/UnidadeExecutoraSigla"/>-->
-                                            <!--</td>-->
                                         </tr>
                                     </tal:block>
                                 </tbody>
