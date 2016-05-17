@@ -81,6 +81,12 @@ class ListaRegistroAtividadesView(BrowserView):
             try:
                 for i in items['RegistrosDeAtividades']['RegistroAtividade']:
                     if self.context.email == i['UsuarioSolicitante']:
+                        SessionID = i['SessionID']
+                        complexValorAtividade = self.getComplexValorAtividade(items, SessionID)
+                        complexidade = complexValorAtividade['complex']
+                        valor = float(complexValorAtividade['valor'].replace(',', '.'))
+                        #federativo = i['SistemaFederativo']
+                        federativo = True
                         try:
                             OrigemDaDemana = i['OrigemDaDemana']
                         except:
@@ -100,9 +106,70 @@ class ListaRegistroAtividadesView(BrowserView):
                             'TaskURL': i['TaskURL'],
                             'UnidadeClienteSigla': i['UnidadeClienteSigla'],
                             'UnidadeExecutoraSigla': i['UnidadeExecutoraSigla'],
+                            'complexidade': complexidade,
+                            'valor': valor,
                         }
+                        # Calculo da HST
+                        complexidade = valor
+                        multiplicador = float(i['Multiplicador'])
+
+                        if i['IncideDeflator']:
+                            valorDeflator = float(i['Deflator'])
+                        else:
+                            valorDeflator = 1.0
+
+                        if i['IncideDeflator'] and federativo and i['EngenhariaReversa']:
+                            totalHST = ((valor * 1.3) * multiplicador) * valorDeflator
+
+                        if i['IncideDeflator'] and not(federativo) and not(i['EngenhariaReversa']):
+                            totalHST = ((valor * multiplicador) * valorDeflator) * 0.6
+
+                        if not(i['IncideDeflator']) and not(federativo) and not(i['EngenhariaReversa']):
+                            totalHST = (valor * multiplicador) * 0.6
+
+                        if i['IncideDeflator'] and federativo and not(i['EngenhariaReversa']):
+                            totalHST = (valor * multiplicador) * valorDeflator
+
+                        if i['IncideDeflator'] and not(federativo) and i['EngenhariaReversa']:
+                            totalHST = (((valor * 1.3) * multiplicador) * 0.6) * valorDeflator
+
+                        if not(i['IncideDeflator']) and not(federativo) and i['EngenhariaReversa']:
+                            totalHST = ((valor * 1.3) * multiplicador) * 0.6
+
+                        if not(i['IncideDeflator']) and federativo and not(i['EngenhariaReversa']):
+                            totalHST = (valor * multiplicador)
+
+                        if not(i['IncideDeflator']) and federativo and i['EngenhariaReversa']:
+                            totalHST = ((valor * 1.3) * multiplicador)
+                        dic['totalHST'] = totalHST
+
                         self.lista.append(dic)
             except:
                 pass
         pass
 
+    def getComplexValorAtividade(self, items, SessionID):
+        """
+        """
+        try:
+            for i in items['RegistroAtividadesComplexidade']['RegistroAtividadeComplexidade']:
+                if SessionID == i['SessionID']:
+                    dic = {
+                        'complex': i['Nome'],
+                        'valor': i['Valor'],
+                    }
+        except:
+            dic = {
+                'complex': None,
+                'valor': None,
+            }
+        return dic
+
+    def getTotalGeralHST(self):
+        """
+        """
+        total = 0
+        if self.lista:
+            for i in self.lista:
+                total += i['totalHST']
+        return total

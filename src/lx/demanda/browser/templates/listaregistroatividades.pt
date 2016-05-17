@@ -6,6 +6,8 @@
     metal:use-macro="context/main_template/macros/master"
     i18n:domain="lx.LES">
     <head>
+        <metal:block fill-slot="top_slot"
+            tal:define="disable_column_two python:request.set('disable_plone.leftcolumn',1);" />
         <metal:headslot metal:fill-slot="head_slot">
 			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker-bootstrap-filtro.css"/>
 			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker.css"/>
@@ -19,7 +21,7 @@
             <script tal:attributes="src string:${context/portal_url}/jquery.dynatable.js"></script>
             <script type="text/javascript">
                 $(document).ready( function() {
-                    $('#atividades-rotineiras').dynatable({
+                    $('#atividades').dynatable({
                         inputs: {
                             paginationPrev: 'Anterior',
                             paginationNext: 'Próximo',
@@ -40,39 +42,20 @@
                           perPageOptions: [10,20,50,100],
                         },
                     });
-                    $('#atividades-projetizadas').dynatable({
-                        inputs: {
-                            paginationPrev: 'Anterior',
-                            paginationNext: 'Próximo',
-                            paginationText: 'Páginas: ',
-                            perPageText: 'Exibir: ',
-                            searchText: 'Localizar ',
-                            recordCountText: 'Mostrando ',
-                            recordCountToText: ' a ',
-                            recordCountOfText: ' de ',
-                            textFilterFromText: ' (filtrada a partir de ',
-                            textFilterTotalText: ' registros)',
-                        },
-                        params: {
-                            records: 'registros',
-                        },
-                        dataset: {
-                          perPageDefault: 50,
-                          perPageOptions: [10,20,50,100],
-                        },
+
+                    $("#btnLeft").click(function () {
+                        var selectedItem = $("#rightValues option:selected");
+                        $("#leftValues").append(selectedItem);
                     });
-                    $(function() {
-                        if ($('#projetizada').is(':checked')) {
-                            $( "#periodo" ).show();
-                        }
+
+                    $("#btnRight").click(function () {
+                        var selectedItem = $("#leftValues option:selected");
+                        $("#rightValues").append(selectedItem);
                     });
-                    $('#projetizada').change(function() {
-                        if ($(this).is(':checked')) {
-                            $( "#periodo" ).show();
-                        }
-                        if (!$(this).is(':checked')) {
-                            $( "#periodo" ).hide();
-                        }
+
+                    $("#rightValues").change(function () {
+                        var selectedItem = $("#rightValues option:selected");
+                        $("#txtRight").val(selectedItem.text());
                     });
                 });
             </script>
@@ -121,71 +104,94 @@
                         <input type="submit" name="form.enviar" value="Pesquisar" />
                     <tal:block tal:define="ras view/lista" condition="ras">
                         <p><br/></p>
-                        <table class="listing"
-                               summary="Content listing"
-                               i18n:attributes="summary summary_content_listing;"
-                               id="atividades-rotineiras"
-                               style="width:100%;">
-                            <thead>
-                                <tr>
-                                    <th>Sistema</th>
-                                    <th>Ordem de Serviço</th>
-                                    <th>RA</th>
-                                    <th>Status</th>
-                                    <th>Atividade</th>
-                                    <th>Multiplicador</th>
-                                    <th>Deflator</th>
-                                    <th>Eng. Rev.</th>
-                                    <th>Orig. Demana</th>
-                                    <th>Und. Cliente</th>
-                                    <th>Und. Executora</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tal:block repeat="ra ras">
+                        <fieldset>
+                            <legend>Atividades</legend>
+                            <table class="listing"
+                                   summary="Content listing"
+                                   width="100%"
+                                   i18n:attributes="summary summary_content_listing;" id="atividades">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <span tal:content="ra/SistemaSigla"/>
-                                        </td>
-                                        <td style="text-align:center;">
-                                            <span tal:content="ra/OrdemServico"/>
-                                        </td>
-                                        <td>
-                                            <!--<span tal:content="ra/ra"/>-->
-                                            <span tal:replace="structure ra/TaskURL"/>
-                                        </td>
-                                        <td>
-                                            <span tal:content="ra/Status"/>
-                                        </td>
-                                        <td style="text-align:center;">
-                                            <span tal:content="ra/CodigoAtividade"/>
-                                        </td>
-                                        <td style="text-align:center;">
-                                            <span tal:content="ra/Multiplicador"/>
-                                        </td>
-                                        <td tal:define="isDeflator ra/IncideDeflator">
-                                            <tal:block condition="isDeflator">
-                                                <span tal:content="ra/Deflator"/>
-                                            </tal:block>
-                                        </td>
-                                        <td tal:define="isEngenhariaReversa ra/EngenhariaReversa">
-                                            <tal:block condition="isEngenhariaReversa">
-                                                <span>Sim</span>
-                                            </tal:block>
-                                        </td>
-                                        <td>
-                                            <span tal:content="ra/OrigemDaDemana"/>
-                                        </td>
-                                        <td>
-                                            <span tal:content="ra/UnidadeClienteSigla"/>
-                                        </td>
-                                        <td>
-                                            <span tal:content="ra/UnidadeExecutoraSigla"/>
-                                        </td>
+                                        <th>Sistema</th>
+                                        <th>Orig. Demana</th>
+                                        <th>Ordem de Serviço</th>
+                                        <th>RA</th>
+                                        <th>Status</th>
+                                        <th>Atividade</th>
+                                        <th>Complexidade</th>
+                                        <th>Valor</th>
+                                        <th>Multiplicador</th>
+                                        <th>Deflator</th>
+                                        <th>Eng. Rev.</th>
+                                        <th>Total HST</th>
+                                        <!--<th>Und. Cliente</th>-->
+                                        <!--<th>Und. Executora</th>-->
                                     </tr>
-                                </tal:block>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="11">Total</th>
+                                        <th>
+                                            <span tal:content="view/getTotalGeralHST"/>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tal:block repeat="ra ras">
+                                        <tr>
+                                            <td>
+                                                <span tal:content="ra/SistemaSigla"/>
+                                            </td>
+                                            <td>
+                                                <span tal:content="ra/OrigemDaDemana"/>
+                                            </td>
+                                            <td style="text-align:center;">
+                                                <span tal:content="ra/OrdemServico"/>
+                                            </td>
+                                            <td>
+                                                <!--<span tal:content="ra/ra"/>-->
+                                                <span tal:replace="structure ra/TaskURL"/>
+                                            </td>
+                                            <td>
+                                                <span tal:content="ra/Status"/>
+                                            </td>
+                                            <td style="text-align:center;">
+                                                <span tal:content="ra/CodigoAtividade"/>
+                                            </td>
+                                            <td style="text-align:center;">
+                                                <span tal:content="ra/complexidade"/>
+                                            </td>
+                                            <td style="text-align:center;">
+                                                <span tal:content="ra/valor"/>
+                                            </td>
+                                            <td style="text-align:center;">
+                                                <span tal:content="ra/Multiplicador"/>
+                                            </td>
+                                            <td tal:define="isDeflator ra/IncideDeflator">
+                                                <tal:block condition="isDeflator">
+                                                    <span tal:content="ra/Deflator"/>
+                                                </tal:block>
+                                            </td>
+                                            <td tal:define="isEngenhariaReversa ra/EngenhariaReversa">
+                                                <tal:block condition="isEngenhariaReversa">
+                                                    <span>Sim</span>
+                                                </tal:block>
+                                            </td>
+                                            <td>
+                                                <span tal:content="ra/totalHST"/>
+                                            </td>
+                                            <!--<td>-->
+                                                <!--<span tal:content="ra/UnidadeClienteSigla"/>-->
+                                            <!--</td>-->
+                                            <!--<td>-->
+                                                <!--<span tal:content="ra/UnidadeExecutoraSigla"/>-->
+                                            <!--</td>-->
+                                        </tr>
+                                    </tal:block>
+                                </tbody>
+                            </table>
+                            <div style="clear: both;"></div>
+                        </fieldset>
                     </tal:block>
                 </fieldset>
             </form>
