@@ -80,7 +80,11 @@ class ListaRegistroAtividadesView(BrowserView):
         if items:
             try:
                 for i in items['RegistrosDeAtividades']['RegistroAtividade']:
-                    if (self.context.email == i['UsuarioSolicitante']) or (self.context.email == i['UsuarioExecutor']):
+                    try:
+                        UsuarioExecutor = i['UsuarioExecutor']
+                    except:
+                        UsuarioExecutor = ''
+                    if (self.context.email == i['UsuarioSolicitante']) or (self.context.email == UsuarioExecutor):
                         SessionID = i['SessionID']
                         complexValorAtividade = self.getComplexValorAtividade(items, SessionID)
                         complexidade = complexValorAtividade['complex']
