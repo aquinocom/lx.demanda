@@ -80,7 +80,7 @@ class ListaRegistroAtividadesView(BrowserView):
         if items:
             try:
                 for i in items['RegistrosDeAtividades']['RegistroAtividade']:
-                    if self.context.email == i['UsuarioSolicitante']:
+                    if (self.context.email == i['UsuarioSolicitante']) or (self.context.email == i['UsuarioExecutor']):
                         SessionID = i['SessionID']
                         complexValorAtividade = self.getComplexValorAtividade(items, SessionID)
                         complexidade = complexValorAtividade['complex']
@@ -91,6 +91,14 @@ class ListaRegistroAtividadesView(BrowserView):
                             OrigemDaDemana = i['OrigemDaDemana']
                         except:
                             OrigemDaDemana = ''
+                        try:
+                            UnidadeClienteSigla = i['UnidadeClienteSigla']
+                        except:
+                            UnidadeClienteSigla = ''
+                        try:
+                            UnidadeExecutoraSigla = i['UnidadeExecutoraSigla']
+                        except:
+                            UnidadeExecutoraSigla = ''
                         dic = {
                             'ra':  i['ProcessID'],
                             'Status': i['Status'],
@@ -104,8 +112,8 @@ class ListaRegistroAtividadesView(BrowserView):
                             'EngenhariaReversa': i['EngenhariaReversa'],
                             'OrigemDaDemana': OrigemDaDemana,
                             'TaskURL': i['TaskURL'],
-                            'UnidadeClienteSigla': i['UnidadeClienteSigla'],
-                            'UnidadeExecutoraSigla': i['UnidadeExecutoraSigla'],
+                            'UnidadeClienteSigla': UnidadeClienteSigla,
+                            'UnidadeExecutoraSigla': UnidadeExecutoraSigla,
                             'complexidade': complexidade,
                             'valor': valor,
                         }
