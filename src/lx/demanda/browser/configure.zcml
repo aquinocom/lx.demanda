@@ -96,5 +96,13 @@
         permission="zope2.View"
     />
 
+    <browser:page
+        name="lista-RA-OS"
+        for="*"
+        class=".listaRAOS.ListaRAOSView"
+        template="templates/listaRAOS.pt"
+        permission="zope2.View"
+    />
+
 
 </configure>
