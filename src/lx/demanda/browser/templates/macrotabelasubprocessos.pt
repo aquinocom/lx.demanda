@@ -43,7 +43,8 @@
             <tal:block repeat="ra ras">
                 <tal:block define="status ra/Status;
                                 classe python:'cancelada' if status == 'Cancelada' else 'ok';">
-                    <tr>
+                    <tr tal:define="oddrow repeat/ra/odd;"
+                        tal:attributes="class python:oddrow and  'even' or 'odd'">
                         <td>
                             <span tal:content="ra/SistemaSigla" tal:attributes="class classe"/>
                         </td>
