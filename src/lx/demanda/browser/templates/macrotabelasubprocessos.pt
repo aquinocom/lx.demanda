@@ -2,7 +2,7 @@
     <table class="listing"
            summary="Content listing"
            width="100%"
-           i18n:attributes="summary summary_content_listing;" id="atividade">
+           i18n:attributes="summary summary_content_listing;">
         <thead>
             <tr>
                 <th>Sistema</th>
