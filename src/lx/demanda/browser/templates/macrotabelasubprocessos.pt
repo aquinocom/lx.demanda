@@ -1,0 +1,105 @@
+<metal:block define-macro="tabela_subprocessos">
+    <table class="listing"
+           summary="Content listing"
+           width="100%"
+           i18n:attributes="summary summary_content_listing;" id="atividade">
+        <thead>
+            <tr>
+                <th>Sistema</th>
+                <th>Orig. Demana</th>
+                <th>Und. Cliente</th>
+                <th>Und. Executora</th>
+                <th>Solicitante</th>
+                <th>Executor</th>
+                <th>Ordem de Serviço</th>
+                <th>RA</th>
+                <th>Status</th>
+                <th>Atividade</th>
+                <th>Complexidade</th>
+                <th>Valor</th>
+                <th>Multiplicador</th>
+                <th>Deflator</th>
+                <th>Eng. Rev.</th>
+                <th>Total HST</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th colspan="15">Total</th>
+                <th>
+                    <span tal:content="python: view.getTotalSubprocessoHST(subprocesso)"/>
+                </th>
+            </tr>
+            <tal:block tal:define="cancelRA python: view.getTotalSubprocessoCancelHST(subprocesso)" condition="python: cancelRA != 0">
+                <tr>
+                    <th colspan="15">Total HST Canceladas</th>
+                    <th>
+                        <span tal:content="cancelRA"/>
+                    </th>
+                </tr>
+            </tal:block>
+        </tfoot>
+        <tbody>
+            <tal:block repeat="ra ras">
+                <tal:block define="status ra/Status;
+                                classe python:'cancelada' if status == 'Cancelada' else 'ok';">
+                    <tr>
+                        <td>
+                            <span tal:content="ra/SistemaSigla" tal:attributes="class classe"/>
+                        </td>
+                        <td>
+                            <span tal:content="ra/OrigemDaDemana" tal:attributes="class classe"/>
+                        </td>
+                        <td>
+                            <span tal:content="ra/UnidadeClienteSigla" tal:attributes="class classe"/>
+                        </td>
+                        <td>
+                            <span tal:content="ra/UnidadeExecutoraSigla" tal:attributes="class classe"/>
+                        </td>
+                        <td>
+                            <span tal:content="ra/UsuarioSolicitante" tal:attributes="class classe"/>
+                        </td>
+                        <td>
+                            <span tal:content="ra/UsuarioExecutor" tal:attributes="class classe"/>
+                        </td>
+                        <td style="text-align:center;">
+                            <span tal:content="ra/OrdemServico" tal:attributes="class classe"/>
+                        </td>
+                        <td>
+                            <!--<span tal:content="ra/ra"/>-->
+                            <span tal:replace="structure ra/TaskURL"/>
+                        </td>
+                        <td>
+                            <span tal:content="ra/Status" tal:attributes="class classe"/>
+                        </td>
+                        <td style="text-align:center;">
+                            <span tal:content="ra/CodigoAtividade" tal:attributes="class classe"/>
+                        </td>
+                        <td style="text-align:center;">
+                            <span tal:content="ra/complexidade" tal:attributes="class classe"/>
+                        </td>
+                        <td style="text-align:center;">
+                            <span tal:content="ra/valor" tal:attributes="class classe"/>
+                        </td>
+                        <td style="text-align:center;">
+                            <span tal:content="ra/Multiplicador" tal:attributes="class classe"/>
+                        </td>
+                        <td tal:define="isDeflator ra/IncideDeflator">
+                            <tal:block condition="isDeflator">
+                                <span tal:content="ra/Deflator" tal:attributes="class classe"/>
+                            </tal:block>
+                        </td>
+                        <td tal:define="isEngenhariaReversa ra/EngenhariaReversa">
+                            <tal:block condition="isEngenhariaReversa">
+                                <span  tal:attributes="class classe">Sim</span>
+                            </tal:block>
+                        </td>
+                        <td>
+                            <span tal:content="ra/totalHST"  tal:attributes="class classe"/>
+                        </td>
+                    </tr>
+                </tal:block>
+            </tal:block>
+        </tbody>
+    </table>
+</metal:block>

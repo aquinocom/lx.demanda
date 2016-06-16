@@ -104,5 +104,19 @@
         permission="zope2.View"
     />
 
+    <browser:pages
+        for="*"
+        class=".listaossubprocessos.ListaOSSubprocessosView"
+        permission="zope2.View">
+
+        <browser:page
+            name="lista-os-subprocessos"
+            template="templates/listaossubprocessos.pt"
+        />
+        <browser:page
+            name="macro_tabela_subprocessos"
+            template="templates/macrotabelasubprocessos.pt"
+        />
+    </browser:pages>
 
 </configure>

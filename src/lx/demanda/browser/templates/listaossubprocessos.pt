@@ -1,0 +1,256 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    lang="en"
+    metal:use-macro="context/main_template/macros/master"
+    i18n:domain="lx.LES">
+    <head>
+        <metal:block fill-slot="top_slot"
+            tal:define="disable_column_two python:request.set('disable_plone.leftcolumn',1);" />
+        <metal:headslot metal:fill-slot="head_slot">
+			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker-bootstrap-filtro.css"/>
+			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker.css"/>
+            <link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/jquery.dynatable.css">
+            <link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/tabela.css">
+
+			<!--<script type="text/javascript" tal:attributes="src string:${context/portal_url}/jquery-1.11.2.min.js"></script>-->
+			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.js"></script>
+			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.pt-BR.js"></script>
+
+            <script tal:attributes="src string:${context/portal_url}/jquery.dynatable.js"></script>
+            <script type="text/javascript">
+                $(document).ready( function() {
+                    $('#atividades').dynatable({
+                        inputs: {
+                            paginationPrev: 'Anterior',
+                            paginationNext: 'Próximo',
+                            paginationText: 'Páginas: ',
+                            perPageText: 'Exibir: ',
+                            searchText: 'Localizar ',
+                            recordCountText: 'Mostrando ',
+                            recordCountToText: ' a ',
+                            recordCountOfText: ' de ',
+                            textFilterFromText: ' (filtrada a partir de ',
+                            textFilterTotalText: ' registros)',
+                        },
+                        params: {
+                            records: 'registros',
+                        },
+                        dataset: {
+                          perPageDefault: 300,
+                          perPageOptions: [10,20,50,100,300,500],
+                        },
+                    });
+
+                    $("#btnLeft").click(function () {
+                        var selectedItem = $("#rightValues option:selected");
+                        $("#leftValues").append(selectedItem);
+                    });
+
+                    $("#btnRight").click(function () {
+                        var selectedItem = $("#leftValues option:selected");
+                        $("#rightValues").append(selectedItem);
+                    });
+
+                    $("#rightValues").change(function () {
+                        var selectedItem = $("#rightValues option:selected");
+                        $("#txtRight").val(selectedItem.text());
+                    });
+                });
+            </script>
+        </metal:headslot>
+    </head>
+    <body>
+        <tal:block metal:fill-slot="main">
+            <style type="text/css">
+                .cancelada{
+                    color: red;
+                    font-weigth: bold;
+                }
+            </style>
+            <h1 tal:content="context/Title"></h1>
+            <form method="post"
+                tal:attributes="action string:${context/absolute_url}/lista-os-subprocessos"
+                enctype="multipart/form-data"
+                tal:define="errors view/errors">
+                <fieldset
+                        tal:define="os_request python: context.REQUEST.get('ordemServico', None);
+                                    ano_request python: context.REQUEST.get('anoOS', None);">
+                    <legend>Ordem de Serviço</legend>
+                    <table>
+                        <tr>
+                            <td width="200px">
+                                <div tal:define="error errors/ordem_servico | nothing;"
+                                    tal:attributes="class python:'field error' if error else 'field'">
+                                    <label for="ordem_servico " i18n:translate="">Ordem de Serviço</label>
+                                    <span class="fieldRequired" i18n:translate="">(Obrigatório)</span>
+                                    <div class="formHelp" i18n:translate="">
+                                        Informe o número da ordem de serviço: Ex. 0163
+                                    </div>
+                                    <div tal:condition="error" tal:content="error" />
+                                    <input id="ordemServico" name="ordemServico" type="text" tal:attributes="value os_request|nothing" size="10"/>
+                                </div>
+                            </td>
+                            <td width="200px" style="padding-left:10px;">
+                                <div tal:define="error errors/ano | nothing;"
+                                    tal:attributes="class python:'field error' if error else 'field'">
+                                    <label for="ano " i18n:translate="">Ano</label>
+                                    <span class="fieldRequired" i18n:translate="">(Obrigatório)</span>
+                                    <div class="formHelp" i18n:translate="">
+                                        Informe o ano da ordem de serviço: Ex. 2016
+                                    </div>
+                                    <div tal:condition="error" tal:content="error" />
+                                    <input id="anoOS" name="anoOS" type="text" tal:attributes="value ano_request|nothing" size="10"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                        <div style="clear: both;"></div>
+                        <input type="submit" name="form.enviar" value="Pesquisar" />
+                    <tal:block tal:condition="view/lista">
+                        <div style="clear: both;"></div>
+                        <br/><br/>
+                        <h3>Total de HST: <span tal:replace="view/getTotalGeralHST"/></h3>
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_1_1;
+                                        subprocesso string:1.1;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>1.1 - LEVANTAR REQUISITOS E ESPECIFICAR SOLUÇÃO</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_1_2;
+                                        subprocesso string:1.2;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>1.2 - IMPLEMENTAÇÃO</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_1_3;
+                                        subprocesso string:1.3;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>1.3 - IMPLANTAÇÃO</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_1_4;
+                                        subprocesso string:1.4;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>1.4 - TESTE DE SOFTWARE</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_1_5;
+                                        subprocesso string:1.5;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>1.5 - PROCESSO GESTÃO DE DADOS</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_1_6;
+                                        subprocesso string:1.6;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>1.6 - SUPORTE DE SUSTENTAÇÃO DE SOFTWARE</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_1_7;
+                                        subprocesso string:1.7;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>1.7 - DATA WAREHOUSE EBUSINESS INTELLIGENCE</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_1_8;
+                                        subprocesso string:1.8;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>1.8 - APOIO A EXECUÇÃO DE ATIVIDADES TÉCNICAS</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_2_1;
+                                        subprocesso string:2.1;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>2.1 - EDUCAÇÃO A DISTÂNCIA - ANÁLISE INICIAL</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_2_2;
+                                        subprocesso string:2.2;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>2.2 - EDUCAÇÃO A DISTÂNCIA - DESENVOLVIMENTO INSTRUCIONAL</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_2_3;
+                                        subprocesso string:2.3;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>2.3 - EDUCAÇÃO A DISTÂNCIA - PRODUÇÃO DOS CONTEÚDOS</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_2_4;
+                                        subprocesso string:2.4;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>2.4 - EDUCAÇÃO A DISTÂNCIA - IMPLEMENTAÇÃO</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_2_5;
+                                        subprocesso string:2.5;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>2.5 - EDUCAÇÃO A DISTÂNCIA - ACOMPANHAMENTO E APOIO</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_3_1;
+                                        subprocesso string:3.1;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>3.1 - MANUTENÇÃO CORRETIVA - REGRA GERAL</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                    <tal:block
+                            tal:define="ras view/lista_3_2;
+                                        subprocesso string:3.2;"
+                            condition="ras">
+                        <p><br/></p>
+                        <h1>3.2 - CASOS ESPECIAIS</h1>
+                        <metal:block use-macro="context/@@macro_tabela_subprocessos/macros/tabela_subprocessos" />
+                        <div style="clear: both;"></div>
+                    </tal:block>
+                </fieldset>
+            </form>
+        </tal:block>
+    </body>
+</html>
