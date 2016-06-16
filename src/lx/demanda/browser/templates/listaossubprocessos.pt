@@ -9,56 +9,6 @@
         <metal:block fill-slot="top_slot"
             tal:define="disable_column_two python:request.set('disable_plone.leftcolumn',1);" />
         <metal:headslot metal:fill-slot="head_slot">
-			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker-bootstrap-filtro.css"/>
-			<link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/datepicker.css"/>
-            <link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/jquery.dynatable.css">
-            <link rel="stylesheet" type="text/css" tal:attributes="href string:${context/portal_url}/tabela.css">
-
-			<!--<script type="text/javascript" tal:attributes="src string:${context/portal_url}/jquery-1.11.2.min.js"></script>-->
-			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.js"></script>
-			<script type="text/javascript" tal:attributes="src string:${context/portal_url}/bootstrap-datepicker.pt-BR.js"></script>
-
-            <script tal:attributes="src string:${context/portal_url}/jquery.dynatable.js"></script>
-            <script type="text/javascript">
-                $(document).ready( function() {
-                    $('#atividades').dynatable({
-                        inputs: {
-                            paginationPrev: 'Anterior',
-                            paginationNext: 'Próximo',
-                            paginationText: 'Páginas: ',
-                            perPageText: 'Exibir: ',
-                            searchText: 'Localizar ',
-                            recordCountText: 'Mostrando ',
-                            recordCountToText: ' a ',
-                            recordCountOfText: ' de ',
-                            textFilterFromText: ' (filtrada a partir de ',
-                            textFilterTotalText: ' registros)',
-                        },
-                        params: {
-                            records: 'registros',
-                        },
-                        dataset: {
-                          perPageDefault: 300,
-                          perPageOptions: [10,20,50,100,300,500],
-                        },
-                    });
-
-                    $("#btnLeft").click(function () {
-                        var selectedItem = $("#rightValues option:selected");
-                        $("#leftValues").append(selectedItem);
-                    });
-
-                    $("#btnRight").click(function () {
-                        var selectedItem = $("#leftValues option:selected");
-                        $("#rightValues").append(selectedItem);
-                    });
-
-                    $("#rightValues").change(function () {
-                        var selectedItem = $("#rightValues option:selected");
-                        $("#txtRight").val(selectedItem.text());
-                    });
-                });
-            </script>
         </metal:headslot>
     </head>
     <body>
