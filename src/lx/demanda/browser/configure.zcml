@@ -104,6 +104,14 @@
         permission="zope2.View"
     />
 
+    <browser:page
+        name="lista-RA-OS-v2"
+        for="*"
+        class=".listaRAOSV2.ListaRAOSV2View"
+        template="templates/listaRAOSV2.pt"
+        permission="zope2.View"
+    />
+
     <browser:pages
         for="*"
         class=".listaossubprocessos.ListaOSSubprocessosView"

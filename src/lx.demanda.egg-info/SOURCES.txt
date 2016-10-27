@@ -22,12 +22,16 @@ src/lx/demanda/browser/controledemanda.py
 src/lx/demanda/browser/demanda.py
 src/lx/demanda/browser/demandaos.py
 src/lx/demanda/browser/exportExcel.py
+src/lx/demanda/browser/listaRAOS.py
 src/lx/demanda/browser/listademanda.py
 src/lx/demanda/browser/listademandaos.py
+src/lx/demanda/browser/listaossubprocessos.py
+src/lx/demanda/browser/listaregistroatividades.py
 src/lx/demanda/browser/subprocessos.py
 src/lx/demanda/content/__init__.py
 src/lx/demanda/content/atividade.py
 src/lx/demanda/content/demanda.py
+src/lx/demanda/content/secao.py
 src/lx/demanda/interfaces/__init__.py
 src/lx/demanda/interfaces/catalogoservico.py
 src/lx/demanda/interfaces/contents.py
