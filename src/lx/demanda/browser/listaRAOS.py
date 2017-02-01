@@ -30,6 +30,7 @@ class ListaRAOSView(BrowserView):
         self.url_servico_ra = self.site_properties.URL_SERVICO_RA
 
         self.lista = []
+        self.SiglaOsID = 'SUST'
 
         if 'ordemServico' in request.form:
             ordemServico = request.form['ordemServico']
@@ -76,7 +77,7 @@ class ListaRAOSView(BrowserView):
         """
         """
         client = Client(self.url_servico_ra)
-        items = client.service.Executar(OrdemDeServicoID=self.ordemServico, AnoOsID=self.anoOS)
+        items = client.service.Executar(OrdemDeServicoID=self.ordemServico, AnoOsID=self.anoOS, SiglaOsID=self.SiglaOsID)
         if items:
             try:
                 for i in items['RegistrosDeAtividades']['RegistroAtividade']:

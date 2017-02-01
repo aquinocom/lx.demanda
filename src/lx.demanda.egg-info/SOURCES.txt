@@ -23,6 +23,7 @@ src/lx/demanda/browser/demanda.py
 src/lx/demanda/browser/demandaos.py
 src/lx/demanda/browser/exportExcel.py
 src/lx/demanda/browser/listaRAOS.py
+src/lx/demanda/browser/listaRAOSV2.py
 src/lx/demanda/browser/listademanda.py
 src/lx/demanda/browser/listademandaos.py
 src/lx/demanda/browser/listaossubprocessos.py
